@@ -5,7 +5,7 @@
     <!-- Tagline -->
     <div class ="text-center py-3">
         <p class ="fs-4 fw-bold" style = "letter-spacing: 1.5px;">
-            Luxry evolves. Style Endures.
+            Luxury evolves. Style Endures.
         </p>
         <p class = "fs-5">
             Every Piece deserves another story.
