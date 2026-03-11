@@ -27,13 +27,13 @@
     <h2>Categories</h2>
 
     <div class="category-buttons">
-        <a href="products.php?category=watches" class="btn">Watches</a>
-        <a href="products.php?category=jewelry" class="btn">Jewelry</a>
-        <a href="products.php?category=shoes" class="btn">Shoes</a>
-        <a href="products.php?category=clothes" class="btn">Clothes</a>
-        <a href="products.php?category=bags" class="btn">Bags</a>
-        <a href="products.php?category=accessories" class="btn">Accessories</a>
-    </div>
+    <a href="products.php?category=watches" class="category-watch">Watches</a>
+    <a href="products.php?category=jewellery" class="category-jewellery">Jewellery</a>
+    <a href="products.php?category=shoes" class="category-shoes">Shoes</a>
+    <a href="products.php?category=clothes" class="category-clothes">Clothes</a>
+    <a href="products.php?category=bags" class="category-bags">Bags</a>
+    <a href="products.php?category=accessories" class="category-accessories">Accessories</a>
+</div>
 </main>
 
 <?php include 'includes/footer.php'; ?>

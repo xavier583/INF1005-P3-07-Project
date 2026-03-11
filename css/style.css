@@ -14,6 +14,7 @@ body {
     margin: auto;
     overflow: hidden;
     padding: 20px 0;
+    text-align: center;
 }
 
 /* Header Styles */
@@ -49,13 +50,14 @@ main h1, main h2 {
     text-align: center;
 }
 
+/* Brand Font */
 .brand-name {
     font-family: 'Great Vibes', cursive;
     font-size: 1.5em;
     margin-left: 10px;
 }
 
-/* Button Styles */
+/* General Button Styles */
 .btn {
     display: inline-block;
     background: transparent;
@@ -68,13 +70,77 @@ main h1, main h2 {
     border-radius: 5px;
 }
 
-.btn:hover {
-    background: #333;
-    color: #fff;
+/* Category Buttons Container as Grid */
+.category-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 20px;                             /* spacing between buttons */
+    justify-items: center;                  /* center buttons horizontally */
+    margin-top: 40px;
 }
 
-/* Category Buttons Container */
-.category-buttons {
+/* Category Buttons Styling */
+.category-buttons a {
+    width: 220px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin-top: 20px;
+    line-height: normal;
+    padding: 0;
+
+    font-size: 1.3em;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+
+    background-size: cover;
+    background-position: center;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    transition: transform 0.3s;
+}
+
+/* Hover effect */
+.category-buttons a:hover {
+    transform: scale(1.05);
+}
+
+/* Background images */
+.category-watch {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/watch-product-page.jpg");
+}
+
+.category-jewellery {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/jewellery-product-page.jpg");
+}
+
+.category-shoes {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/shoes-product-page.jpg");
+}
+
+.category-clothes {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/clothes-product-page.jpg");
+}
+
+.category-bags {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/bags-product-page.jpg");
+}
+
+.category-accessories {
+    background-image:
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("../images/accessories-product-page.jpg");
 }
