@@ -2,7 +2,7 @@
 <?php include 'includes/nav.php'; ?>
 
 <main class="container">
-    <h1>Welcome to Luxury Secondhand</h1>
+    <h1>Welcome to Maison Reluxe</h1>
     <p>Your one-stop shop for luxury secondhand goods.</p>
 </main>
 
