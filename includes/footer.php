@@ -8,7 +8,7 @@
             Luxury evolves. Style Endures.
         </p>
         <p class = "fs-5">
-            Every Piece deserves another story.
+            Every piece deserves another story.
         </p>
     </div>
     <!-- Copyright -->
