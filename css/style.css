@@ -145,54 +145,39 @@ main h1, main h2 {
         url("../images/accessories-product-page.jpg");
 }
 
-/* Form container */
-.form-box {
-    width: 400px;
-    margin: auto;
+/* Center the form */
+form {
+    width: 320px;
+    margin: 0 auto; /* centers the form */
 }
 
-/* Each row */
+/* Each form row */
 .form-group {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 15px;
 }
 
 /* Labels */
 .form-group label {
-    width: 150px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-/* Inputs */
+/* Input boxes */
 .form-group input {
-    width: 250px;      /* controls the length of the input box */
+    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-/* Checkbox alignment */
-.form-group.checkbox {
-    justify-content: flex-start;
-}
-
-/* Button styling */
-.form-box button {
+/* Center the button */
+form button {
     display: block;
     margin: 20px auto;
     padding: 10px 25px;
-    border: none;
-    background: #333;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
 }
-
-.form-box button:hover {
-    background: #555;
-}
-
 .nav-link i {
     font-size: 1.6rem;
 }

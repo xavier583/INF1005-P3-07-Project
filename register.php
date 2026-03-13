@@ -1,9 +1,11 @@
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav.php'; ?>
 
-
 <form action="process_register.php" method="post" class="form-box">
     <h1>Member Registration</h1>
+     <p>
+        Have an account?Sign in <a href="login.php">here</a>
+    </p>
     <div class="form-group">
         <label for="fname">First Name:</label>
         <input type="text" id="fname" name="fname" placeholder="Enter first name">
