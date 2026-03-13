@@ -24,15 +24,19 @@
             </ul>
 
             <ul class="navbar-nav ms-auto">
+
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
+                    <a class="nav-link" href="cart.php">
+                        <i class="bi bi-cart"></i>
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="cart.php">Cart</a>
+                    <a class="nav-link" href="login.php">
+                <i class="bi bi-person"></i>
+                    </a>
                 </li>
             </ul>
-
         </div>
     </div>
 </nav>

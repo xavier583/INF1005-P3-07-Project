@@ -84,5 +84,6 @@
             "type": "php",
             "request": "launch"
         }
+        
     ]
 }

@@ -1,45 +1,42 @@
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav.php'; ?>
 
-<main class="container">
+
+<form action="process_register.php" method="post" class="form-box">
     <h1>Member Registration</h1>
-
-    <p>
-        For existing members, please go to the
-        <a href="login.php">Sign In page</a>.
-    </p>
-
-    <form action="process_register.php" method="post">
-
+    <div class="form-group">
         <label for="fname">First Name:</label>
         <input type="text" id="fname" name="fname" placeholder="Enter first name">
-        <br>
+    </div>
 
+    <div class="form-group">
         <label for="lname">Last Name:</label>
         <input type="text" id="lname" name="lname" placeholder="Enter last name">
-        <br>
+    </div>
 
+    <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="Enter email">
-        <br>
+    </div>
 
+    <div class="form-group">
         <label for="pwd">Password:</label>
         <input type="password" id="pwd" name="pwd" placeholder="Enter password">
-        <br>
+    </div>
 
+    <div class="form-group">
         <label for="pwd_confirm">Confirm Password:</label>
         <input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Confirm password">
-        <br>
+    </div>
 
+    <div class="form-group checkbox">
         <label>
-            <input type="checkbox" name="agree">
-            Agree to terms and conditions.
+            <input type="checkbox" name="agree"> Agree to terms and conditions
         </label>
-        <br>
+    </div>
 
-        <button type="submit">Register</button>
+    <button type="submit">Register</button>
 
-    </form>
-</main>
+</form>
 
 <?php include 'includes/footer.php'; ?>
