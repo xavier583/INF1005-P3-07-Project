@@ -45,6 +45,11 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
+.nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
 /* Main Content Styles */
 main h1, main h2 {
     text-align: center;
