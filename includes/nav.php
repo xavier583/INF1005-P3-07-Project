@@ -30,13 +30,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="cart.php">
+                    <a class="nav-link <?php if($currentPage == 'cart.php') echo 'active'; ?>" href="cart.php">
                         <i class="bi bi-cart"></i>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">
+                    <a class="nav-link <?php if($currentPage == 'login.php') echo 'active'; ?>" href="login.php">
                 <i class="bi bi-person"></i>
                     </a>
                 </li>
