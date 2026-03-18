@@ -30,12 +30,12 @@ include 'includes/header.php';
         <h2>Categories</h2>
 
         <div class="category-buttons">
-        <a href="products.php?category=watches" class="category-watch">Watches</a>
+        <a href="Products/watches.php" class="category-watch">Watches</a>
         <a href="Products/jewellery.php" class="category-jewellery">Jewellery</a>
-        <a href="products.php?category=shoes" class="category-shoes">Shoes</a>
-        <a href="products.php?category=clothes" class="category-clothes">Clothes</a>
-        <a href="products.php?category=bags" class="category-bags">Bags</a>
-        <a href="products.php?category=accessories" class="category-accessories">Accessories</a>
+        <a href="Products/shoes.php" class="category-shoes">Shoes</a>
+        <a href="Products/clothes.php" class="category-clothes">Clothes</a>
+        <a href="Products/bags.php" class="category-bags">Bags</a>
+        <a href="Products/accessories.php" class="category-accessories">Accessories</a>
     </div>
     </main>
 

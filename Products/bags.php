@@ -5,7 +5,7 @@ include '../includes/header.php';
 <?php include '../includes/nav.php'; ?>
 
 <div class = "container mt-5">
-    <h1>Jewellery Collection</h1>
+    <h1>Bag Collection</h1>
     <div class = "row">
 
         <!--- Product 1 -->
@@ -17,15 +17,11 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/jewellery/cartier_bracelet.jpg" class="d-block w-100" alt="Cartier 1">
+                    <img src="../images/bags/chanel_bag.png" class="d-block w-100" alt="Chanel 1">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/cartier_bracelet1.jpg" class="d-block w-100" alt="Cartier 2">
-                </div>
-
-                <div class="carousel-item">
-                    <img src="../images/jewellery/cartier_bracelet2.jpg" class="d-block w-100" alt="Cartier 3">
+                    <img src="../images/bags/chanel_bag1.png" class="d-block w-100" alt="Chanel 2">
                 </div>
             </div>
 
@@ -41,9 +37,9 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Cartier</h4>
-            <h5 class="card-title">Love 18k Yellow Gold Bracelet</h5>
-            <p class="card-text">$14,000</p>
+            <h4 class="card-title">Chanel</h4>
+            <h5 class="card-title">Mini Classic Handbag - Lambskin Black</h5>
+            <p class="card-text">$5,888</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -58,15 +54,15 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/jewellery/bvlgari_bracelet.png" class="d-block w-100" alt="Bvlgari 1">
+                    <img src="../images/bags/loewe_bag.png" class="d-block w-100" alt="Loewe 1">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/bvlgari_bracelet1.jpg" class="d-block w-100" alt="Bvlgari 2">
+                    <img src="../images/bags/loewe_bag1.png" class="d-block w-100" alt="Loewe 2">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/bvlgari_bracelet2.jpg" class="d-block w-100" alt="Bvlgari 3">
+                    <img src="../images/bags/loewe_bag2.png" class="d-block w-100" alt="Loewe 3">
                 </div>
             </div>
 
@@ -82,9 +78,9 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Bvlgari</h4>
-            <h5 class="card-title">Serpenti Viper Bracelet 18k Rose Gold</h5>
-            <p class="card-text">$50,000</p>
+            <h4 class="card-title">Loewe</h4>
+            <h5 class="card-title">Small Puzzle Edge bagin classic calfskin - Eucalyptus Green</h5>
+            <p class="card-text">$4,500</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -99,11 +95,15 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/jewellery/tiffany_necklace.jpg" class="d-block w-100" alt="Tiffany 1">
+                    <img src="../images/bags/lv_bag.png" class="d-block w-100" alt="LV 1">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/tiffany_necklace1.jpg" class="d-block w-100" alt="Tiffany 2">
+                    <img src="../images/bags/lv_bag1.png" class="d-block w-100" alt="LV 2">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="../images/bags/lv_bag2.png" class="d-block w-100" alt="LV 3">
                 </div>
             </div>
 
@@ -119,9 +119,9 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Tiffany & Co.</h4>
-            <h5 class="card-title">Return to Tiffany Silver Necklace</h5>
-            <p class="card-text">$1,500</p>
+            <h4 class="card-title">Louis Vuitton</h4>
+            <h5 class="card-title">Speedy Bandoulière 20 - Beige Monogram</h5>
+            <p class="card-text">$2,500</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -136,11 +136,15 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/jewellery/dior_earrings.png" class="d-block w-100" alt="Dior 1">
+                    <img src="../images/bags/miumiu_bag.png" class="d-block w-100" alt="Miu Miu 1">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/dior_earrings1.png" class="d-block w-100" alt="Dior 2">
+                    <img src="../images/bags/miumiu_bag1.png" class="d-block w-100" alt="Miu Miu 2">
+                </div>
+
+                 <div class="carousel-item">
+                    <img src="../images/bags/miumiu_bag2.png" class="d-block w-100" alt="Miu Miu 3">
                 </div>
             </div>
 
@@ -156,9 +160,9 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Dior</h4>
-            <h5 class="card-title">Petit CD Earrings - Silver-Finish Metal with White Resin Pearls</h5>
-            <p class="card-text">$450</p>
+            <h4 class="card-title">Miu Miu</h4>
+            <h5 class="card-title">Wander matelassé nappa leather hobo bag - Small in Pink</h5>
+            <p class="card-text">$$2,850</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -173,11 +177,11 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/jewellery/chanel_ring1.png" class="d-block w-100" alt="Chanel 1">
+                    <img src="../images/bags/ysl_bag.png" class="d-block w-100" alt="YSL 1">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/jewellery/chanel_ring.png" class="d-block w-100" alt="Chanel 2">
+                    <img src="../images/bags/ysl_bag1.png" class="d-block w-100" alt="YSL 2">
                 </div>
             </div>
 
@@ -193,51 +197,13 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Chanel</h4>
-            <h5 class="card-title">Faux Pearl Matte Gold Tone CC Logo Ring</h5>
-            <p class="card-text">$600</p>
+            <h4 class="card-title">YSL</h4>
+            <h5 class="card-title">LE 5 À 7 Supple Small iN Grained Leather - Black</h5>
+            <p class="card-text">$3,150</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
 </div>
-
-        <!--- Product 6 -->
-        <div class="col-md-4 mb-4">
-        <div class="card h-100 text-center">
-
-        <!-- Carousel START -->
-        <div id="carousel6" class="carousel slide">
-            <div class="carousel-inner">
-
-                <div class="carousel-item active">
-                    <img src="../images/jewellery/hermes_necklace.png" class="d-block w-100" alt="Hermes 1">
-                </div>
-
-                <div class="carousel-item">
-                    <img src="../images/jewellery/hermes_necklace1.png" class="d-block w-100" alt="Hermes 2">
-                </div>
-            </div>
-
-            <!-- Arrows --> 
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel6" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel6" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>
-        <!-- Carousel END -->
-
-        <div class="card-body">
-            <h4 class="card-title">Hermes</h4>
-            <h5 class="card-title">Mini Pop H Pendant - Rose Gold Plated</h5>
-            <p class="card-text">$780</p>
-            <button class="btn btn-dark">Add to Cart</button>
-        </div>
-    </div>
-</div>
-
     </div>
 </div>
 
