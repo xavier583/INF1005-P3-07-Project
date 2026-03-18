@@ -117,37 +117,37 @@ main h1, main h2 {
 .category-watch {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/watch-product-page.jpg");
+        url("../images/watch_product_page.jpg");
 }
 
 .category-jewellery {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/jewellery-product-page.jpg");
+        url("../images/jewellery_product_page.jpg");
 }
 
 .category-shoes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/shoes-product-page.jpg");
+        url("../images/shoes_product_page.jpg");
 }
 
 .category-clothes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/clothes-product-page.jpg");
+        url("../images/clothes_product_page.jpg");
 }
 
 .category-bags {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/bags-product-page.jpg");
+        url("../images/bags_product_page.jpg");
 }
 
 .category-accessories {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/accessories-product-page.jpg");
+        url("../images/accessories_product_page.jpg");
 }
 
 /* Center the form */
@@ -208,4 +208,31 @@ form button {
 }
 .nav-link i {
     font-size: 1.6rem;
+}
+
+.card-img-top {
+    height: 250px;       
+    object-fit: cover;    
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    margin-bottom: 5px;
+}
+
+.card-text {
+    margin-bottom: 10px;
+}
+
+.card-body h5 {
+    min-height: 50px;   /* ensures all product names take same space */
+}
+
+.card-body .btn {
+    margin-top: auto;
 }
