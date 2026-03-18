@@ -18,12 +18,10 @@
         </div>
 
         <div class="form-group checkbox">
-            <label>
-                <input type="checkbox" name="remember"> Remember me
-            </label>
+            <input type="checkbox" name="remember" id="remember">
+            <label for="remember">Remember me</label>
         </div>
         <button type="submit">Sign In</button>
-
     </form>
 </main>
 

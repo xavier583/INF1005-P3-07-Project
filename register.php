@@ -4,7 +4,7 @@
 <form action="process_register.php" method="post" class="form-box">
     <h1>Member Registration</h1>
      <p>
-        Have an account?Sign in <a href="login.php">here</a>
+        Have an account? <a href="login.php">Sign in</a>
     </p>
     <div class="form-group">
         <label for="fname">First Name:</label>
@@ -32,13 +32,12 @@
     </div>
 
     <div class="form-group checkbox">
-        <label>
-            <input type="checkbox" name="agree"> Agree to terms and conditions
-        </label>
+        <input type="checkbox" name="agree" id="agree">
+        <label for="agree">Agree to terms and conditions</label>
     </div>
 
     <button type="submit">Register</button>
-
+    
 </form>
 
 <?php include 'includes/footer.php'; ?>
