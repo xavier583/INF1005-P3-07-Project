@@ -117,37 +117,37 @@ main h1, main h2 {
 .category-watch {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/watch_product_page.jpg");
+        url("../images/product page/watch_product_page.jpg");
 }
 
 .category-jewellery {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/jewellery_product_page.jpg");
+        url("../images/product page/jewellery_product_page.jpg");
 }
 
 .category-shoes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/shoes_product_page.jpg");
+        url("../images/product page/shoes_product_page.jpg");
 }
 
 .category-clothes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/clothes_product_page.jpg");
+        url("../images/product page/clothes_product_page.jpg");
 }
 
 .category-bags {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/bags_product_page.jpg");
+        url("../images/product page/bags_product_page.jpg");
 }
 
 .category-accessories {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/accessories_product_page.jpg");
+        url("../images/product page/accessories_product_page.jpg");
 }
 
 /* Center the form */
