@@ -230,7 +230,7 @@ include '../includes/header.php';
         <!-- Carousel END -->
 
         <div class="card-body">
-            <h4 class="card-title">Hermes</h4>
+            <h4 class="card-title">Hermès</h4>
             <h5 class="card-title">Mini Pop H Pendant - Rose Gold Plated</h5>
             <p class="card-text">$780</p>
             <button class="btn btn-dark">Add to Cart</button>
