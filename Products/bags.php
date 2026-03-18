@@ -38,7 +38,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Chanel</h4>
-            <h5 class="card-title">Mini Classic Handbag - Lambskin Black</h5>
+            <h6 class="card-title">Mini Classic Handbag - Lambskin Black</h6>
             <p class="card-text">$5,888</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
@@ -79,7 +79,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Loewe</h4>
-            <h5 class="card-title">Small Puzzle Edge bagin classic calfskin - Eucalyptus Green</h5>
+            <h6 class="card-title">Small Puzzle Edge bagin classic calfskin - Eucalyptus Green</h6>
             <p class="card-text">$4,500</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
@@ -95,7 +95,7 @@ include '../includes/header.php';
             <div class="carousel-inner">
 
                 <div class="carousel-item active">
-                    <img src="../images/bags/lv_bag.png" class="d-block w-100" alt="LV 1">
+                    <img src="../images/bags/lv_bag2.png" class="d-block w-100" alt="LV 1">
                 </div>
 
                 <div class="carousel-item">
@@ -103,7 +103,7 @@ include '../includes/header.php';
                 </div>
 
                 <div class="carousel-item">
-                    <img src="../images/bags/lv_bag2.png" class="d-block w-100" alt="LV 3">
+                    <img src="../images/bags/lv_bag.png" class="d-block w-100" alt="LV 3">
                 </div>
             </div>
 
@@ -120,7 +120,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Louis Vuitton</h4>
-            <h5 class="card-title">Speedy Bandoulière 20 - Beige Monogram</h5>
+            <h6 class="card-title">Speedy Bandoulière 20 - Beige Monogram</h6>
             <p class="card-text">$2,500</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
@@ -161,7 +161,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Miu Miu</h4>
-            <h5 class="card-title">Wander matelassé nappa leather hobo bag - Small in Pink</h5>
+            <h6 class="card-title">Wander matelassé nappa leather hobo bag - Small in Alabester Pink</h6>
             <p class="card-text">$$2,850</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
@@ -198,7 +198,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">YSL</h4>
-            <h5 class="card-title">LE 5 À 7 Supple Small iN Grained Leather - Black</h5>
+            <h6 class="card-title">LE 5 À 7 Supple Small iN Grained Leather - Black</h6>
             <p class="card-text">$3,150</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>

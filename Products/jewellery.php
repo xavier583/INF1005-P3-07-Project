@@ -42,8 +42,8 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Cartier</h4>
-            <h5 class="card-title">Love 18k Yellow Gold Bracelet</h5>
-            <p class="card-text">$14,000</p>
+            <h6 class="card-title">Love 18k Yellow Gold Bracelet</h6>
+            <p class="card-text">$14,870</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -83,8 +83,8 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Bvlgari</h4>
-            <h5 class="card-title">Serpenti Viper Bracelet 18k Rose Gold</h5>
-            <p class="card-text">$50,000</p>
+            <h6 class="card-title">Serpenti Viper Bracelet 18k Rose Gold</h6>
+            <p class="card-text">$50,888</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -120,8 +120,8 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Tiffany & Co.</h4>
-            <h5 class="card-title">Return to Tiffany Silver Necklace</h5>
-            <p class="card-text">$1,500</p>
+            <h6 class="card-title">Return to Tiffany Silver Necklace</h6>
+            <p class="card-text">$1,550</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -157,7 +157,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Dior</h4>
-            <h5 class="card-title">Petit CD Earrings - Silver-Finish Metal with White Resin Pearls</h5>
+            <h6 class="card-title">Petit CD Earrings - Silver-Finish Metal with White Resin Pearls</h6>
             <p class="card-text">$450</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
@@ -194,8 +194,8 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Chanel</h4>
-            <h5 class="card-title">Faux Pearl Matte Gold Tone CC Logo Ring</h5>
-            <p class="card-text">$600</p>
+            <h6 class="card-title">Faux Pearl Matte Gold Tone CC Logo Ring</h6>
+            <p class="card-text">$610</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
     </div>
@@ -231,7 +231,7 @@ include '../includes/header.php';
 
         <div class="card-body">
             <h4 class="card-title">Hermès</h4>
-            <h5 class="card-title">Mini Pop H Pendant - Rose Gold Plated</h5>
+            <h6 class="card-title">Mini Pop H Pendant - Rose Gold Plated</h6>
             <p class="card-text">$780</p>
             <button class="btn btn-dark">Add to Cart</button>
         </div>
