@@ -12,7 +12,7 @@
     <form action="process_register.php" method="post">
 
         <label for="fname">First Name:</label>
-        <input type="text" id="fname" name="fname" placeholder="Enter first name">
+        <input type="text" id="fname" name="fname" placeholder="Enter first name" required>
         <br>
 
         <label for="lname">Last Name:</label>
@@ -20,15 +20,15 @@
         <br>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter email">
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
         <br>
 
         <label for="pwd">Password:</label>
-        <input type="password" id="pwd" name="pwd" placeholder="Enter password">
+        <input type="password" id="pwd" name="pwd" placeholder="Enter password" required>
         <br>
 
         <label for="pwd_confirm">Confirm Password:</label>
-        <input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Confirm password">
+        <input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Confirm password" required>
         <br>
 
         <label>
