@@ -3,33 +3,51 @@ session_start();
 
 // ─── Product Data ─────────────────────────────────────────────────────────────
 $products = [
-    ['id'=>1,'name'=>'Rolex Submariner Ceramic Bezel','price'=>20500.00,'image'=>'rolex 1.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'A legendary diver\'s watch with a unidirectional rotatable bezel and Cerachrom ceramic insert. Water-resistant to 300 metres, powered by the calibre 3235 movement. A timeless icon of precision and luxury.'],
-    ['id'=>2,'name'=>'Rolex Datejust Stainless Steel','price'=>22000.00,'image'=>'rolex 2.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'The quintessential dress watch. Features a classic Jubilee bracelet, Cyclops lens over the date, and a scratch-resistant sapphire crystal. A symbol of refined taste.'],
-    ['id'=>3,'name'=>'Rolex Cosmograph Daytona','price'=>35100.00,'image'=>'rolex 3.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'Born for the race track, perfected for everyday luxury. The Daytona features a tachymetric scale and three chronograph counters. One of the most coveted watches in the world.'],
-    ['id'=>4,'name'=>'Rolex Yacht-Master','price'=>45000.00,'image'=>'rolex 4.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'Designed for seafaring adventurers, the Yacht-Master combines nautical elegance with Rolex\'s uncompromising standards.'],
-    ['id'=>5,'name'=>'Rolex Day-Date Rose Gold','price'=>12000.00,'image'=>'rolex 5.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'The watch of presidents. Crafted in 18ct Everose gold, the Day-Date displays both the day and date.'],
-    ['id'=>6,'name'=>'Hermès Birkin 30 Cacao','price'=>25000.00,'image'=>'birkin 1.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'The ultimate status symbol in rich Cacao Togo leather. Hand-stitched by a single artisan in France.'],
-    ['id'=>7,'name'=>'Hermès Birkin 30 Tin Alligator','price'=>48000.00,'image'=>'birkin 2.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Exceptional rarity in Tin Porosus Alligator leather. The luminous sheen and natural pattern of each scale make every piece one-of-a-kind.'],
-    ['id'=>8,'name'=>'Hermès Birkin 30 Caramel','price'=>22000.00,'image'=>'birkin 3.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'A warm and versatile Caramel Clemence leather Birkin. Soft, supple, and scratch-resistant.'],
-    ['id'=>9,'name'=>'Hermès Birkin 30 Emerald Alligator','price'=>40000.00,'image'=>'birkin 4.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Deep Emerald Porosus Alligator with gold hardware. A jewel-toned statement piece that commands attention.'],
-    ['id'=>10,'name'=>'Hermès Birkin 30 Midnight Alligator','price'=>46000.00,'image'=>'birkin 5.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Midnight Blue Porosus Alligator with palladium hardware. Dramatic, sophisticated, and impossibly rare.'],
-    ['id'=>11,'name'=>'Gucci Wine n Dance Heels','price'=>7800.00,'image'=>'gucci 1.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Bold and theatrical, these Gucci heels in rich burgundy leather are made for the woman who commands every room.'],
-    ['id'=>12,'name'=>'Gucci Corporate Beige Flops','price'=>12500.00,'image'=>'gucci 2.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Effortless corporate luxury in nude beige. Crafted from supple calfskin with a padded footbed.'],
-    ['id'=>13,'name'=>'Gucci V Black Sandals','price'=>9500.00,'image'=>'gucci 3.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Sleek black leather sandals with a geometric V-strap silhouette and gold-toned Gucci buckle.'],
-    ['id'=>14,'name'=>'Chanel Classic Plaited Dress','price'=>9500.00,'image'=>'chanel 1.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'An exquisite piece from Chanel\'s atelier featuring the house\'s signature plaited braid trim.'],
-    ['id'=>15,'name'=>'Chanel Bosswoman Suit','price'=>16000.00,'image'=>'chanel 2.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Power and femininity in perfect balance. This iconic Chanel tweed suit features contrast trim and gold-toned buttons.'],
-    ['id'=>16,'name'=>'Chanel Plaited Knit Sweater','price'=>12500.00,'image'=>'chanel 3.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Luxurious cashmere-blend knit with Chanel\'s signature plaited detailing at the cuffs and hem.'],
-    ['id'=>17,'name'=>'Van Cleef Butterflaura','price'=>850.00,'image'=>'vancleef 1.jpeg','category'=>'Jewellery','brand'=>'Van Cleef & Arpels','description'=>'A delicate butterfly and floral motif in 18ct yellow gold with sparkling pavé diamonds.'],
-    ['id'=>18,'name'=>'Van Cleef Entirely Golden','price'=>990.00,'image'=>'vancleef 2.jpeg','category'=>'Jewellery','brand'=>'Van Cleef & Arpels','description'=>'Pure 18ct yellow gold craftsmanship at its finest. Shaped in the Maison\'s signature four-leaf clover motif.'],
-    ['id'=>19,'name'=>'Van Cleef Open Ladybug','price'=>780.00,'image'=>'vancleef 3.jpeg','category'=>'Jewellery','brand'=>'Van Cleef & Arpels','description'=>'A whimsical open-set ladybug charm in yellow gold with onyx spots from the Lucky Animals collection.'],
-    ['id'=>20,'name'=>'Van Cleef Wondering Ladybug','price'=>780.00,'image'=>'vancleef 4.jpeg','category'=>'Jewellery','brand'=>'Van Cleef & Arpels','description'=>'The iconic ladybug in motion — crafted in 18ct gold with lacquered wings and diamond accents.'],
-    ['id'=>21,'name'=>'Van Cleef Filled With Love','price'=>950.00,'image'=>'vancleef 5.jpeg','category'=>'Jewellery','brand'=>'Van Cleef & Arpels','description'=>'A heart-shaped pendant set with brilliant-cut diamonds in white gold. Romantic and radiant.'],
-    ['id'=>22,'name'=>'YSL Classic Dark Shades','price'=>450.00,'image'=>'ysl 1.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Sleek rectangular frames in matte black acetate with dark grey gradient lenses.'],
-    ['id'=>23,'name'=>'YSL Cat Print Shades','price'=>650.00,'image'=>'ysl 2.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'A bold cat-eye silhouette with the Saint Laurent logo in gold-toned hardware.'],
-    ['id'=>24,'name'=>'YSL Snow Sunnies Midnight','price'=>950.00,'image'=>'ysl 3.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Shield-style sunglasses in Midnight Black with mirrored lenses. Futuristic and fierce.'],
-    ['id'=>25,'name'=>'YSL Snow Sunnies Sunlight','price'=>950.00,'image'=>'ysl 4.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'The iconic shield silhouette in gold-tinted lenses with a champagne frame.'],
+    // WATCHES
+    ['id'=>1,'name'=>'Rolex Submariner Ceramic Bezel','price'=>20500.00,'image'=>'watches/rolex 1.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'A legendary diver\'s watch with a unidirectional rotatable bezel and Cerachrom ceramic insert. Water-resistant to 300 metres, powered by the calibre 3235 movement. A timeless icon of precision and luxury.'],
+    ['id'=>2,'name'=>'Rolex Datejust Stainless Steel','price'=>22000.00,'image'=>'watches/rolex 2.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'The quintessential dress watch. Features a classic Jubilee bracelet, Cyclops lens over the date, and a scratch-resistant sapphire crystal. A symbol of refined taste.'],
+    ['id'=>3,'name'=>'Rolex Cosmograph Daytona','price'=>35100.00,'image'=>'watches/rolex 3.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'Born for the race track, perfected for everyday luxury. The Daytona features a tachymetric scale and three chronograph counters. One of the most coveted watches in the world.'],
+    ['id'=>4,'name'=>'Rolex Yacht-Master','price'=>45000.00,'image'=>'watches/rolex 4.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'Designed for seafaring adventurers, the Yacht-Master combines nautical elegance with Rolex\'s uncompromising standards. Features a bidirectional rotatable bezel and supple Oysterflex bracelet.'],
+    ['id'=>5,'name'=>'Rolex Day-Date Rose Gold','price'=>12000.00,'image'=>'watches/rolex 5.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'The watch of presidents. Crafted in 18ct Everose gold, the Day-Date displays both the day and date. An emblem of achievement worn by world leaders and visionaries.'],
+
+    // BAGS
+    ['id'=>6,'name'=>'Hermès Birkin 30 Cacao','price'=>25000.00,'image'=>'bags/birkin 1.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'The ultimate status symbol in rich Cacao Togo leather. Hand-stitched by a single artisan in France, the Birkin 30 is more than a bag — it is a lifelong investment.'],
+    ['id'=>7,'name'=>'Hermès Birkin 30 Tin Alligator','price'=>48000.00,'image'=>'bags/birkin 2.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Exceptional rarity in Tin Porosus Alligator leather. The luminous sheen and natural pattern of each scale make every piece one-of-a-kind.'],
+    ['id'=>8,'name'=>'Hermès Birkin 30 Caramel','price'=>22000.00,'image'=>'bags/birkin 3.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'A warm and versatile Caramel Clemence leather Birkin. Soft, supple, and scratch-resistant.'],
+    ['id'=>9,'name'=>'Hermès Birkin 30 Emerald Alligator','price'=>40000.00,'image'=>'bags/birkin 4.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Deep Emerald Porosus Alligator with gold hardware. A jewel-toned statement piece that commands attention.'],
+    ['id'=>10,'name'=>'Hermès Birkin 30 Midnight Alligator','price'=>46000.00,'image'=>'bags/birkin 5.jpeg','category'=>'Bags','brand'=>'Hermès','description'=>'Midnight Blue Porosus Alligator with palladium hardware. Dramatic, sophisticated, and impossibly rare.'],
+    ['id'=>27,'name'=>'Chanel Mini Classic Handbag','price'=>5888.00,'image'=>'bags/chanel_bag.png','category'=>'Bags','brand'=>'Chanel','description'=>'The iconic Chanel Classic Flap in mini size, crafted from lambskin leather with gold-toned hardware. A timeless investment piece that transcends every season.'],
+    ['id'=>28,'name'=>'Loewe Puzzle Bag Sage Green','price'=>4200.00,'image'=>'bags/loewe_bag.png','category'=>'Bags','brand'=>'Loewe','description'=>'The architectural Puzzle bag in soft sage green calfskin. Loewe\'s most iconic silhouette — geometric, functional, and unmistakably modern.'],
+    ['id'=>29,'name'=>'Louis Vuitton Speedy Bandoulière 20','price'=>2500.00,'image'=>'bags/lv_bag.png','category'=>'Bags','brand'=>'Louis Vuitton','description'=>'The compact Speedy Bandoulière in the signature Monogram canvas with a detachable shoulder strap. A wardrobe staple reimagined for the contemporary woman.'],
+    ['id'=>30,'name'=>'Miu Miu Wander Hobo Bag','price'=>3800.00,'image'=>'bags/miumiu_bag.png','category'=>'Bags','brand'=>'Miu Miu','description'=>'The Wander hobo in soft matelassé nappa leather with Miu Miu\'s signature ruching. Effortlessly chic and unmistakably feminine.'],
+    ['id'=>31,'name'=>'Saint Laurent Le 5 À 7 Hobo','price'=>3200.00,'image'=>'bags/ysl_bag.png','category'=>'Bags','brand'=>'Saint Laurent','description'=>'The Le 5 À 7 in smooth black leather with a sleek crescent silhouette. A modern Saint Laurent icon that moves effortlessly from day to evening.'],
+
+    // SHOES
+    ['id'=>11,'name'=>'Gucci Wine n Dance Heels','price'=>7800.00,'image'=>'shoes/gucci 1.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Bold and theatrical, these Gucci heels in rich burgundy leather are made for the woman who commands every room. Featuring the iconic double-G hardware and signature stiletto heel.'],
+    ['id'=>12,'name'=>'Gucci Corporate Beige Flops','price'=>12500.00,'image'=>'shoes/gucci 2.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Effortless corporate luxury in nude beige. Crafted from supple calfskin with a padded footbed and the Gucci monogram discreetly embossed at the insole.'],
+    ['id'=>13,'name'=>'Gucci V Black Sandals','price'=>9500.00,'image'=>'shoes/gucci 3.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Sleek black leather sandals with a geometric V-strap silhouette and gold-toned Gucci buckle. The perfect complement to both evening wear and resort collections.'],
+
+    // CLOTHES
+    ['id'=>14,'name'=>'Chanel Classic Plaited Dress','price'=>9500.00,'image'=>'clothes/chanel 1.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'An exquisite piece from Chanel\'s atelier featuring the house\'s signature plaited braid trim. Crafted from double-faced wool, this dress embodies understated Parisian chic.'],
+    ['id'=>15,'name'=>'Chanel Bosswoman Suit','price'=>16000.00,'image'=>'clothes/chanel 2.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Power and femininity in perfect balance. This iconic Chanel tweed suit features contrast trim, gold-toned buttons, and a structured silhouette. A wardrobe cornerstone for the modern woman.'],
+    ['id'=>16,'name'=>'Chanel Plaited Knit Sweater','price'=>12500.00,'image'=>'clothes/chanel 3.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Luxurious cashmere-blend knit with Chanel\'s signature plaited detailing at the cuffs and hem. Effortlessly elegant and impeccably soft — the definition of quiet luxury.'],
+
+    // JEWELLERY
+    ['id'=>17,'name'=>'Cartier Love 18k Yellow Gold Bracelet','price'=>14870.00,'image'=>'jewellery/cartier_bracelet.jpg','category'=>'Jewellery','brand'=>'Cartier','description'=>'The iconic Cartier Love bracelet in 18k yellow gold. A symbol of eternal devotion, secured with a screwdriver — a timeless declaration of love worn by icons worldwide.'],
+    ['id'=>18,'name'=>'Bvlgari Serpenti Viper Bracelet 18k Rose Gold','price'=>50888.00,'image'=>'jewellery/bvlgari_bracelet.png','category'=>'Jewellery','brand'=>'Bvlgari','description'=>'The seductive Serpenti Viper bracelet in 18k rose gold with pavé diamonds. Inspired by the sinuous form of a snake, it wraps around the wrist in a bold declaration of luxury.'],
+    ['id'=>19,'name'=>'Tiffany & Co. Return to Tiffany Silver Necklace','price'=>1550.00,'image'=>'jewellery/tiffany_necklace.jpg','category'=>'Jewellery','brand'=>'Tiffany & Co.','description'=>'The iconic Return to Tiffany heart tag pendant in sterling silver. A beloved symbol of connection and the unmistakable Tiffany legacy, worn by generations of jewellery lovers.'],
+    ['id'=>20,'name'=>'Dior Pearl Drop Earrings','price'=>2800.00,'image'=>'jewellery/dior_earrings.png','category'=>'Jewellery','brand'=>'Dior','description'=>'Delicate pearl drop earrings bearing the signature CD logo. Refined and feminine, these earrings embody the timeless elegance of the House of Dior with a modern pearl twist.'],
+    ['id'=>21,'name'=>'Chanel CC Pearl Ring','price'=>3200.00,'image'=>'jewellery/chanel_ring.png','category'=>'Jewellery','brand'=>'Chanel','description'=>'The iconic double-C motif reimagined as a lustrous pearl ring. A wearable piece of Chanel heritage that bridges classic couture with contemporary jewellery design.'],
+    ['id'=>22,'name'=>'Hermès Amulette Necklace','price'=>4500.00,'image'=>'jewellery/hermes_necklace.png','category'=>'Jewellery','brand'=>'Hermès','description'=>'A minimalist rose gold pendant bearing the discreet Hermès H signature. Understated luxury at its finest — the perfect everyday talisman for the discerning collector.'],
+
+    // ACCESSORIES
+    ['id'=>23,'name'=>'YSL Classic Dark Shades','price'=>450.00,'image'=>'accessories/ysl 1.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Sleek rectangular frames in matte black acetate with dark grey gradient lenses. The YSL monogram adorns each temple — understated luxury for the modern icon.'],
+    ['id'=>24,'name'=>'YSL Cat Print Shades','price'=>650.00,'image'=>'accessories/ysl 2.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'A bold cat-eye silhouette with the Saint Laurent logo in gold-toned hardware. Crafted in Italian acetate — the ultimate accessory for the fashion-forward woman.'],
+    ['id'=>25,'name'=>'YSL Snow Sunnies Midnight','price'=>950.00,'image'=>'accessories/ysl 3.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Shield-style sunglasses in Midnight Black with mirrored lenses. Futuristic and fierce — a statement piece from Saint Laurent\'s avant-garde eyewear line.'],
+    ['id'=>26,'name'=>'YSL Snow Sunnies Sunlight','price'=>950.00,'image'=>'accessories/ysl 4.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'The same iconic shield silhouette in gold-tinted lenses with a champagne frame. Luminous and commanding — made for those who prefer their luxury sun-kissed.'],
 ];
 
+// ─── Category definitions with banner images ──────────────────────────────────
 $categories = [
     'Watches'     => 'product page/watch_product_page.jpg',
     'Jewellery'   => 'product page/jewellery_product_page.jpg',
@@ -55,7 +73,7 @@ $filtered = $showGrid
 
 <?php if (!$showGrid): ?>
 <!-- ═══════════════════════════════════════════════════════════
-     VIEW 1: Category Landing (image cards — original style)
+     VIEW 1: Category Landing (image cards)
 ══════════════════════════════════════════════════════════════ -->
     <div class="text-center mb-5">
         <h1 class="products-title">Our Products</h1>
@@ -99,8 +117,9 @@ $filtered = $showGrid
         </ol>
     </nav>
 
-    <!-- Category Header with banner image -->
-    <div class="category-banner mb-5" style="background-image: url('images/<?= htmlspecialchars($categories[$activeCategory]) ?>');">
+    <!-- Category Banner -->
+    <div class="category-banner mb-5"
+         style="background-image: url('images/<?= htmlspecialchars($categories[$activeCategory]) ?>');">
         <div class="category-banner-overlay">
             <h1 class="category-banner-title"><?= htmlspecialchars($activeCategory) ?></h1>
             <p class="category-banner-sub"><?= count($filtered) ?> items available</p>
@@ -152,7 +171,6 @@ $filtered = $showGrid
 </main>
 
 <style>
-    /* ── Shared titles ── */
     .products-title {
         font-family: 'Georgia', serif;
         font-size: 2rem;
@@ -165,8 +183,7 @@ $filtered = $showGrid
         font-weight: 400;
         color: #444;
     }
-
-    /* ── Category Cards (View 1) ── */
+    /* Category Cards */
     .category-card {
         position: relative;
         border-radius: 10px;
@@ -210,8 +227,7 @@ $filtered = $showGrid
         text-transform: uppercase;
         text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
-
-    /* ── Category Banner (View 2 header) ── */
+    /* Category Banner */
     .category-banner {
         width: 100%;
         height: 200px;
@@ -244,10 +260,8 @@ $filtered = $showGrid
         font-size: 0.9rem;
         margin-top: 6px;
         margin-bottom: 0;
-        letter-spacing: 0.05em;
     }
-
-    /* ── Product Cards (View 2) ── */
+    /* Product Cards */
     .product-card {
         border-radius: 8px;
         overflow: hidden;
