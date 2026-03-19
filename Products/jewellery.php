@@ -48,8 +48,10 @@ include '../includes/header.php';
             <h6 class="card-title">Love 18k Yellow Gold Bracelet</h6>
             <p class="card-text">$14,870</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="1">
                 <input type="hidden" name="name" value="Cartier Love 18k Yellow Gold Bracelet">
                 <input type="hidden" name="price" value="14870">
+                <input type="hidden" name="image" value="../images/jewellery/cartier_bracelet.jpg">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
@@ -93,8 +95,10 @@ include '../includes/header.php';
             <h6 class="card-title">Serpenti Viper Bracelet 18k Rose Gold</h6>
             <p class="card-text">$50,888</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="2">
                 <input type="hidden" name="name" value="Bvlgari Serpenti Viper Bracelet 18k Rose Gold">
                 <input type="hidden" name="price" value="50888">
+                <input type="hidden" name="image" value="../images/jewellery/bvlgari_bracelet.png">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
@@ -134,8 +138,10 @@ include '../includes/header.php';
             <h6 class="card-title">Return to Tiffany Silver Necklace</h6>
             <p class="card-text">$1,550</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="3">
                 <input type="hidden" name="name" value="Tiffany & Co. Return to Tiffany Silver Necklace">
                 <input type="hidden" name="price" value="1550">
+                <input type="hidden" name="image" value="../images/jewellery/tiffany_necklace.jpg">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
@@ -175,8 +181,10 @@ include '../includes/header.php';
             <h6 class="card-title">Petit CD Earrings - Silver-Finish Metal with White Resin Pearls</h6>
             <p class="card-text">$450</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="4">
                 <input type="hidden" name="name" value="Dior Petit CD Earrings - Silver-Finish Metal with White Resin Pearls">
                 <input type="hidden" name="price" value="450">
+                <input type="hidden" name="image" value="../images/jewellery/dior_earrings.png">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
@@ -216,8 +224,10 @@ include '../includes/header.php';
             <h6 class="card-title">Faux Pearl Matte Gold Tone CC Logo Ring</h6>
             <p class="card-text">$610</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="5">
                 <input type="hidden" name="name" value="Chanel Faux Pearl Matte Gold Tone CC Logo Ring">
                 <input type="hidden" name="price" value="610">
+                <input type="hidden" name="image" value="../images/jewellery/chanel_ring.png">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
@@ -257,8 +267,10 @@ include '../includes/header.php';
             <h6 class="card-title">Mini Pop H Pendant - Rose Gold Plated</h6>
             <p class="card-text">$780</p>
             <form method ="POST" action="../cart.php">
+                <input type="hidden" name="id" value="6">
                 <input type="hidden" name="name" value="Hermès Mini Pop H Pendant - Rose Gold Plated">
                 <input type="hidden" name="price" value="780">
+                <input type="hidden" name="image" value="../images/jewellery/hermes_necklace.png">
                 <button type="submit" name = "add" class="btn btn-dark">Add to Cart</button>
             </form>
         </div>
