@@ -1,4 +1,7 @@
-<?php include 'includes/header.php'; ?>
+<?php
+$rootPath = ".";
+include 'includes/header.php';
+?>
 <?php include 'includes/nav.php'; ?>
 
 <main class="container">
@@ -7,9 +10,18 @@
         New user? <a href="register.php">Create an account</a>.
     </p>
     <form action="process_login.php" method="post">
-        <div class="form-group">  
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter email" required>
+        <div class="form-group">
+        <label for="fname">Username:</label>
+        <input type="username" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required>
+        <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $username = $_POST["fname"];
+            if (!preg_match("/^[a-zA-Z0-9_]{4,20}$/", $username)) {
+                echo "<p style='color: red;'>Username must be between 4 and 20 characters and can only contain letters, numbers, and underscores.</p>";
+            }
+            $username = htmlspecialchars(trim($_POST['username']));
+        }
+        ?>
         </div>
 
         <div class="form-group">
@@ -18,12 +30,10 @@
         </div>
 
         <div class="form-group checkbox">
-            <label>
-                <input type="checkbox" name="remember"> Remember me
-            </label>
+            <input type="checkbox" name="remember" id="remember">
+            <label for="remember">Remember me</label>
         </div>
         <button type="submit">Sign In</button>
-
     </form>
 </main>
 

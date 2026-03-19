@@ -45,6 +45,11 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
+.nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
 /* Main Content Styles */
 main h1, main h2 {
     text-align: center;
@@ -112,64 +117,87 @@ main h1, main h2 {
 .category-watch {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/watch-product-page.jpg");
+        url("../images/product page/watch_product_page.jpg");
 }
 
 .category-jewellery {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/jewellery-product-page.jpg");
+        url("../images/product page/jewellery_product_page.jpg");
 }
 
 .category-shoes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/shoes-product-page.jpg");
+        url("../images/product page/shoes_product_page.jpg");
 }
 
 .category-clothes {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/clothes-product-page.jpg");
+        url("../images/product page/clothes_product_page.jpg");
 }
 
 .category-bags {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/bags-product-page.jpg");
+        url("../images/product page/bags_product_page.jpg");
 }
 
 .category-accessories {
     background-image:
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url("../images/accessories-product-page.jpg");
+        url("../images/product page/accessories_product_page.jpg");
 }
 
 /* Center the form */
 form {
-    width: 320px;
-    margin: 0 auto; /* centers the form */
+    width: 350px;
+    margin: 0 auto;
 }
 
-/* Each form row */
+/* Each row */
 .form-group {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     margin-bottom: 15px;
 }
 
-/* Labels */
+/* Labels (fixed width for alignment) */
 .form-group label {
-    margin-bottom: 5px;
+    width: 120px;
     font-weight: bold;
+    margin: 0;
 }
 
-/* Input boxes */
+/* Inputs */
 .form-group input {
-    width: 100%;
+    width: 200px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+/* Checkbox row fix */
+.form-group.checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: right;
+    gap: 8px;    
+    width: 100%;          /* small space between checkbox and text */
+}
+
+/* Remove fixed width from checkbox label */
+.form-group.checkbox label {
+    width: auto;
+    margin: 0;
+    font-weight: normal;
+
+}
+
+/* Optional: make checkbox slightly bigger */
+.form-group.checkbox input {
+    width: auto;
 }
 
 /* Center the button */
@@ -180,4 +208,31 @@ form button {
 }
 .nav-link i {
     font-size: 1.6rem;
+}
+
+.card-img-top {
+    height: 250px;       
+    object-fit: cover;    
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    margin-bottom: 5px;
+}
+
+.card-text {
+    margin-bottom: 10px;
+}
+
+.card-body h5 {
+    min-height: 50px;   /* ensures all product names take same space */
+}
+
+.card-body .btn {
+    margin-top: auto;
 }

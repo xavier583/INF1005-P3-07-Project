@@ -30,14 +30,13 @@ $products = [
     ['id'=>25,'name'=>'YSL Snow Sunnies Sunlight','price'=>950.00,'image'=>'ysl 4.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'The iconic shield silhouette in gold-tinted lenses with a champagne frame.'],
 ];
 
-// ─── Category definitions with their banner images ────────────────────────────
 $categories = [
-    'Watches'     => 'watch-product-page.jpg',
-    'Jewellery'   => 'jewellery-product-page.jpg',
-    'Shoes'       => 'shoes-product-page.jpg',
-    'Clothes'     => 'clothes-product-page.jpg',
-    'Bags'        => 'bags-product-page.jpg',
-    'Accessories' => 'accessories-product-page.jpg',
+    'Watches'     => 'product page/watch_product_page.jpg',
+    'Jewellery'   => 'product page/jewellery_product_page.jpg',
+    'Shoes'       => 'product page/shoes_product_page.jpg',
+    'Clothes'     => 'product page/clothes_product_page.jpg',
+    'Bags'        => 'product page/bags_product_page.jpg',
+    'Accessories' => 'product page/accessories_product_page.jpg',
 ];
 
 // ─── Determine view mode ──────────────────────────────────────────────────────
