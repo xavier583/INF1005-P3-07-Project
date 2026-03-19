@@ -1,7 +1,10 @@
-    <?php
+<?php session_start(); ?>
+
+<?php
 $rootPath = ".";
 include 'includes/header.php';
 ?>
+
     <?php include 'includes/nav.php'; ?>
 
     <style>
