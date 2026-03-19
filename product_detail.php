@@ -44,6 +44,47 @@ foreach ($products as $p) {
 }
 if (!$product) { header('Location: products.php'); exit; }
 
+function buildProductGalleryImages($imagePath)
+{
+    $gallery = [];
+
+    if (!is_string($imagePath) || $imagePath === '') {
+        return $gallery;
+    }
+
+    $gallery[] = str_replace('\\', '/', $imagePath);
+
+    $baseDir  = dirname($imagePath);
+    $baseName = pathinfo($imagePath, PATHINFO_FILENAME);
+    $imagesRoot = __DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR;
+
+    $searchPattern = $imagesRoot . str_replace('/', DIRECTORY_SEPARATOR, $baseDir)
+        . DIRECTORY_SEPARATOR . $baseName . '*';
+
+    $matches = glob($searchPattern) ?: [];
+
+    foreach ($matches as $matchedFile) {
+        if (!is_file($matchedFile)) {
+            continue;
+        }
+
+        $relative = substr($matchedFile, strlen($imagesRoot));
+        $relative = str_replace('\\', '/', $relative);
+
+        if (!preg_match('/\.(jpe?g|png|webp|gif)$/i', $relative)) {
+            continue;
+        }
+
+        if (!in_array($relative, $gallery, true)) {
+            $gallery[] = $relative;
+        }
+    }
+
+    return $gallery;
+}
+
+$galleryImages = buildProductGalleryImages($product['image']);
+
 // ─── Handle Add to Cart ───────────────────────────────────────────────────────
 $cartMessage = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
@@ -94,10 +135,38 @@ $related = array_slice($related, 0, 3);
     <!-- Product Detail -->
     <div class="row g-5 align-items-start">
         <div class="col-md-6">
-            <div class="detail-img-wrapper">
-                <img src="images/<?= htmlspecialchars($product['image']) ?>"
-                     alt="<?= htmlspecialchars($product['name']) ?>"
-                     class="detail-img">
+            <div id="productGalleryCarousel" class="carousel slide detail-carousel" data-bs-ride="false">
+                <div class="carousel-inner detail-img-wrapper">
+                    <?php foreach ($galleryImages as $index => $galleryImage): ?>
+                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                        <img src="images/<?= htmlspecialchars($galleryImage) ?>"
+                             alt="<?= htmlspecialchars($product['name']) ?> image <?= $index + 1 ?>"
+                             class="detail-img d-block w-100">
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <?php if (count($galleryImages) > 1): ?>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productGalleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productGalleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
+                <div class="carousel-indicators detail-carousel-indicators">
+                    <?php foreach ($galleryImages as $index => $galleryImage): ?>
+                    <button type="button"
+                            data-bs-target="#productGalleryCarousel"
+                            data-bs-slide-to="<?= $index ?>"
+                            class="<?= $index === 0 ? 'active' : '' ?>"
+                            aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
+                            aria-label="Slide <?= $index + 1 ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-md-6">
@@ -150,8 +219,27 @@ $related = array_slice($related, 0, 3);
 </main>
 
 <style>
-    .detail-img-wrapper { width:100%; height:520px; background:#f5f5f5; border-radius:8px; overflow:hidden; }
-    .detail-img { width:100%; height:100%; object-fit:cover; }
+    .detail-carousel { border-radius:8px; overflow:hidden; background:#f5f5f5; }
+    .detail-img-wrapper { width:100%; height:520px; }
+    .detail-img { width:100%; height:520px; object-fit:cover; }
+    .detail-carousel .carousel-control-prev,
+    .detail-carousel .carousel-control-next { width:12%; }
+    .detail-carousel .carousel-control-prev-icon,
+    .detail-carousel .carousel-control-next-icon {
+        background-color: rgba(0,0,0,0.45);
+        border-radius: 50%;
+        background-size: 55%;
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+    .detail-carousel-indicators { margin-bottom: 0.7rem; }
+    .detail-carousel-indicators [data-bs-target] {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 0;
+        opacity: 0.65;
+    }
     .detail-brand { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.15em; color:#888; margin-bottom:4px; }
     .detail-name { font-family:'Georgia',serif; font-size:1.6rem; font-weight:400; line-height:1.3; color:#1a1a1a; }
     .detail-price { font-size:1.5rem; font-weight:600; color:#1a1a1a; }
@@ -165,6 +253,13 @@ $related = array_slice($related, 0, 3);
     .product-card:hover .related-img { transform:scale(1.05); }
     .product-brand { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; }
     .product-price { font-size:1rem; font-weight:600; color:#1a1a1a; }
+
+    @media (max-width: 768px) {
+        .detail-img-wrapper,
+        .detail-img {
+            height: 360px;
+        }
+    }
 </style>
 
 <?php include 'includes/footer.php'; ?>
