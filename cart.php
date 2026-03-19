@@ -62,16 +62,16 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
         <div class="col-lg-8">
 
             <!-- Column Headers -->
-            <div class="row d-none d-md-flex text-muted small text-uppercase mb-2 px-2" style="letter-spacing:0.08em;">
+            <div class="row gx-0 d-none d-md-flex text-muted small text-uppercase mb-2 px-2" style="letter-spacing:0.08em;">
                 <div class="col-6">Item</div>
                 <div class="col-2 text-center">Price</div>
                 <div class="col-2 text-center">Qty</div>
-                <div class="col-2 text-end">Subtotal</div>
+                <div class="col-2 text-end subtotal-header">Subtotal</div>
             </div>
             <hr class="d-none d-md-block mt-0">
 
             <?php foreach ($cart as $item): ?>
-            <div class="cart-item row align-items-center py-3 border-bottom">
+            <div class="cart-item row gx-0 align-items-center py-3 border-bottom px-2">
 
                 <!-- Image + Name -->
                 <div class="col-12 col-md-6 d-flex align-items-center gap-3 mb-3 mb-md-0">
@@ -95,13 +95,13 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
                 </div>
 
                 <!-- Unit Price (desktop) -->
-                <div class="col-md-2 text-center d-none d-md-block">
+                <div class="col-md-2 text-center d-none d-md-block price-col">
                     <span class="cart-price">$<?= number_format($item['price'], 2) ?></span>
                 </div>
 
                 <!-- Quantity -->
-                <div class="col-6 col-md-2 text-center">
-                    <form method="POST" class="d-flex align-items-center justify-content-center gap-1">
+                <div class="col-6 col-md-2 text-center qty-col">
+                    <form method="POST" class="qty-form d-flex align-items-center justify-content-center gap-1">
                         <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
                         <button type="submit" name="update_qty" class="qty-btn" onclick="this.form.quantity.value=Math.max(0,parseInt(this.form.quantity.value)-1)">−</button>
                         <input
@@ -118,7 +118,7 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
                 </div>
 
                 <!-- Subtotal + Remove (desktop) -->
-                <div class="col-6 col-md-2 text-end d-flex flex-column align-items-end">
+                <div class="col-6 col-md-2 subtotal-col d-flex flex-column align-items-end">
                     <span class="cart-subtotal">$<?= number_format($item['price'] * $item['quantity'], 2) ?></span>
                     <form method="POST" class="d-none d-md-block mt-1">
                         <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
@@ -257,6 +257,54 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
     .qty-input::-webkit-outer-spin-button {
         -webkit-appearance: none;
     }
+    .qty-col {
+        display: flex;
+        justify-content: center;
+    }
+    .qty-form {
+        margin: 0 auto;
+    }
+    .subtotal-header,
+    .subtotal-col {
+        padding-right: 0;
+    }
+    .subtotal-col {
+        text-align: right;
+    }
+
+    @media (min-width: 768px) {
+        .price-col {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .qty-col {
+            align-items: center;
+            min-height: 80px;
+        }
+
+        .qty-form {
+            width: 112px;
+            justify-content: center;
+        }
+
+        .subtotal-col {
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .subtotal-col form {
+            margin-top: 2px !important;
+        }
+
+        .subtotal-header,
+        .subtotal-col {
+            padding-right: 2px;
+        }
+    }
+
     .summary-card {
         background: #fafafa;
         border: 1px solid #eee;
