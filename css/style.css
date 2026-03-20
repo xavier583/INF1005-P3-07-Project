@@ -236,3 +236,126 @@ form button {
 .card-body .btn {
     margin-top: auto;
 }
+
+/* CHECKOUT PAGE */
+
+.checkout-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.field {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    background: #fafafa;
+}
+
+.checkout-section .row {
+    display: flex;
+    gap: 20px;
+}
+.checkout-section .row .field {
+    flex: 1;
+}
+
+.payment-box {
+    background: #f3f1f5;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.payment-header span {
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.cards img {
+    height: 24px;
+    width: auto;
+    margin-left: 8px;
+}
+
+.payment-inner {
+    background: #e9e6eb;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.pay-btn {
+    width: 100%;
+    padding: 15px;
+    background: black;
+    color: white;
+    border: none;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background: black;
+}
+
+.error-box {
+    background: white;
+    border: 2px solid black;
+    color: red;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.error-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+/* SUCCESS PAYYMENT PAGE */
+.success-container {
+    max-width: 600px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 40px 20px;
+}
+.success-container h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.success-container p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.success-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: black;
+    color: white;
+    border-radius: 4px;
+}
+
+.success-btn:hover {
+    background: black;
+}

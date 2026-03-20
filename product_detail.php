@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+    $_SESSION['wishlist'] = [];
+}
+
 // ─── Product Data (must match products.php) ───────────────────────────────────
 $products = [
     ['id'=>1,'name'=>'Rolex Submariner Ceramic Bezel','price'=>20500.00,'image'=>'watches/rolex 1.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'A legendary diver\'s watch with a unidirectional rotatable bezel and Cerachrom ceramic insert. Water-resistant to 300 metres, powered by the calibre 3235 movement. A timeless icon of precision and luxury.'],
@@ -24,6 +28,8 @@ $products = [
     ['id'=>14,'name'=>'Chanel Classic Plaited Dress','price'=>9500.00,'image'=>'clothes/chanel 1.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'An exquisite piece from Chanel\'s atelier featuring the house\'s signature plaited braid trim.'],
     ['id'=>15,'name'=>'Chanel Bosswoman Suit','price'=>16000.00,'image'=>'clothes/chanel 2.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Power and femininity in perfect balance. This iconic Chanel tweed suit features contrast trim and gold-toned buttons.'],
     ['id'=>16,'name'=>'Chanel Plaited Knit Sweater','price'=>12500.00,'image'=>'clothes/chanel 3.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Luxurious cashmere-blend knit with Chanel\'s signature plaited detailing at the cuffs and hem.'],
+    ['id'=>38,'name'=>'Louis Vuitton Flared Sleeve Lavallière Blouse','price'=>2500.00,'image'=>'clothes/lv_clothes.png','category'=>'Clothes','brand'=>'Louis Vuitton','description'=>'The iconic Louis Vuitton flared sleeve lavallière blouse in premium cotton with the signature LV monogram. A timeless piece that combines elegance with modern sophistication.'],
+    ['id'=>39,'name'=>'Prada Cropped Cotton Cardigan','price'=>1800.00,'image'=>'clothes/prada_clothes.png','category'=>'Clothes','brand'=>'Prada','description'=>'A chic cropped cardigan in soft cotton with Prada\'s signature logo buttons. Perfect for layering or wearing on its own for a touch of understated luxury.'],
     ['id'=>17,'name'=>'Cartier Love 18k Yellow Gold Bracelet','price'=>14870.00,'image'=>'jewellery/cartier_bracelet.jpg','category'=>'Jewellery','brand'=>'Cartier','description'=>'The iconic Cartier Love bracelet in 18k yellow gold. A symbol of eternal devotion, secured with a screwdriver — a timeless declaration of love worn by icons worldwide.'],
     ['id'=>18,'name'=>'Bvlgari Serpenti Viper Bracelet 18k Rose Gold','price'=>50888.00,'image'=>'jewellery/bvlgari_bracelet.png','category'=>'Jewellery','brand'=>'Bvlgari','description'=>'The seductive Serpenti Viper bracelet in 18k rose gold with pavé diamonds. Inspired by the sinuous form of a snake, it wraps around the wrist in a bold declaration of luxury.'],
     ['id'=>19,'name'=>'Tiffany & Co. Return to Tiffany Silver Necklace','price'=>1550.00,'image'=>'jewellery/tiffany_necklace.jpg','category'=>'Jewellery','brand'=>'Tiffany & Co.','description'=>'The iconic Return to Tiffany heart tag pendant in sterling silver. A beloved symbol of connection and the unmistakable Tiffany legacy.'],
@@ -34,6 +40,12 @@ $products = [
     ['id'=>24,'name'=>'YSL Cat Print Shades','price'=>650.00,'image'=>'accessories/ysl 2.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'A bold cat-eye silhouette with the Saint Laurent logo in gold-toned hardware. Crafted in Italian acetate.'],
     ['id'=>25,'name'=>'YSL Snow Sunnies Midnight','price'=>950.00,'image'=>'accessories/ysl 3.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Shield-style sunglasses in Midnight Black with mirrored lenses. Futuristic and fierce.'],
     ['id'=>26,'name'=>'YSL Snow Sunnies Sunlight','price'=>950.00,'image'=>'accessories/ysl 4.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'The iconic shield silhouette in gold-tinted lenses with a champagne frame. Luminous and commanding.'],
+    ['id'=>32,'name'=>'Gucci Belt with Interlocking G Buckle','price'=>450.00,'image'=>'accessories/gucci_belt.png','category'=>'Accessories','brand'=>'Gucci','description'=>'The iconic Gucci belt in black leather with the signature interlocking G buckle in palladium-toned hardware. A versatile accessory that elevates any outfit with a touch of Italian luxury.'],
+    ['id'=>33,'name'=>'Gucci Reversible belt with Interlocking G Buckle','price'=>550.00,'image'=>'accessories/gucci_reversible_belt.png','category'=>'Accessories','brand'=>'Gucci','description'=>'The ultimate in versatility, this reversible Gucci belt features the iconic interlocking G buckle in palladium-toned hardware. One side in classic black leather, the other in rich brown'],
+    ['id'=>34,'name'=>'Celine Triomphe Cap in Cotton Canvas','price'=>350.00,'image'=>'accessories/celine_cap.png','category'=>'Accessories','brand'=>'Celine','description'=>'The Triomphe cap in durable cotton canvas with the signature Celine Triomphe motif embroidered on the front. A stylish and practical accessory for sunny days.'],
+    ['id'=>35,'name'=>'Miu Miu Denim Baseball Cap in Beige/Amaranth','price'=>550.00,'image'=>'accessories/miumiu_cap.png','category'=>'Accessories','brand'=>'Miu Miu','description'=>'A classic baseball cap in soft denim with the signature Miu Miu logo on the front. Perfect for adding a touch of effortless style to any casual outfit.'],
+    ['id'=>36,'name'=>'Dior B23 League Low-Top Sneaker','price'=>1200.00,'image'=>'shoes/diorlow_shoes.png','category'=>'Shoes','brand'=>'Dior','description'=>'The Dior B23 League low-top sneaker in premium leather with the signature Dior logo. A versatile and comfortable choice for everyday wear.'],
+    ['id'=>37,'name'=>'Dior B23 League High-Top Sneaker','price'=>1500.00,'image'=>'shoes/diorhigh_shoes.png','category'=>'Shoes','brand'=>'Dior','description'=>'The Dior B23 League high-top sneaker in premium leather with the signature Dior logo. A versatile and comfortable choice for everyday wear.'],
 ];
 
 // ─── Find product by ID ───────────────────────────────────────────────────────
@@ -43,6 +55,63 @@ foreach ($products as $p) {
     if ($p['id'] === $id) { $product = $p; break; }
 }
 if (!$product) { header('Location: products.php'); exit; }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
+    $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+    $key = array_search($pid, $_SESSION['wishlist'], true);
+
+    if ($key === false) {
+        $_SESSION['wishlist'][] = $pid;
+    } else {
+        unset($_SESSION['wishlist'][$key]);
+        $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+    }
+
+    header('Location: product_detail.php?id=' . $id);
+    exit;
+}
+
+function buildProductGalleryImages($imagePath)
+{
+    $gallery = [];
+
+    if (!is_string($imagePath) || $imagePath === '') {
+        return $gallery;
+    }
+
+    $gallery[] = str_replace('\\', '/', $imagePath);
+
+    $baseDir  = dirname($imagePath);
+    $baseName = pathinfo($imagePath, PATHINFO_FILENAME);
+    $imagesRoot = __DIR__ . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR;
+
+    $searchPattern = $imagesRoot . str_replace('/', DIRECTORY_SEPARATOR, $baseDir)
+        . DIRECTORY_SEPARATOR . $baseName . '*';
+
+    $matches = glob($searchPattern) ?: [];
+
+    foreach ($matches as $matchedFile) {
+        if (!is_file($matchedFile)) {
+            continue;
+        }
+
+        $relative = substr($matchedFile, strlen($imagesRoot));
+        $relative = str_replace('\\', '/', $relative);
+
+        if (!preg_match('/\.(jpe?g|png|webp|gif)$/i', $relative)) {
+            continue;
+        }
+
+        if (!in_array($relative, $gallery, true)) {
+            $gallery[] = $relative;
+        }
+    }
+
+    return $gallery;
+}
+
+$galleryImages = buildProductGalleryImages($product['image']);
+$isWishlisted = in_array((int)$product['id'], array_map('intval', $_SESSION['wishlist']), true);
 
 // ─── Handle Add to Cart ───────────────────────────────────────────────────────
 $cartMessage = '';
@@ -94,10 +163,38 @@ $related = array_slice($related, 0, 3);
     <!-- Product Detail -->
     <div class="row g-5 align-items-start">
         <div class="col-md-6">
-            <div class="detail-img-wrapper">
-                <img src="images/<?= htmlspecialchars($product['image']) ?>"
-                     alt="<?= htmlspecialchars($product['name']) ?>"
-                     class="detail-img">
+            <div id="productGalleryCarousel" class="carousel slide detail-carousel" data-bs-ride="false">
+                <div class="carousel-inner detail-img-wrapper">
+                    <?php foreach ($galleryImages as $index => $galleryImage): ?>
+                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                        <img src="images/<?= htmlspecialchars($galleryImage) ?>"
+                             alt="<?= htmlspecialchars($product['name']) ?> image <?= $index + 1 ?>"
+                             class="detail-img d-block w-100">
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <?php if (count($galleryImages) > 1): ?>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productGalleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productGalleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+
+                <div class="carousel-indicators detail-carousel-indicators">
+                    <?php foreach ($galleryImages as $index => $galleryImage): ?>
+                    <button type="button"
+                            data-bs-target="#productGalleryCarousel"
+                            data-bs-slide-to="<?= $index ?>"
+                            class="<?= $index === 0 ? 'active' : '' ?>"
+                            aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
+                            aria-label="Slide <?= $index + 1 ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-md-6">
@@ -112,6 +209,13 @@ $related = array_slice($related, 0, 3);
                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                 <button type="submit" name="add_to_cart" class="btn btn-dark btn-lg w-100 add-cart-btn">
                     Add to Cart
+                </button>
+            </form>
+            <form method="POST" action="" class="mt-2">
+                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                <button type="submit" name="toggle_wishlist" class="btn btn-outline-dark w-100 wishlist-detail-btn <?= $isWishlisted ? 'active' : '' ?>">
+                    <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
+                    <?= $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' ?>
                 </button>
             </form>
             <a href="products.php?category=<?= urlencode($product['category']) ?>" class="btn btn-outline-dark mt-3 w-100">
@@ -150,13 +254,37 @@ $related = array_slice($related, 0, 3);
 </main>
 
 <style>
-    .detail-img-wrapper { width:100%; height:520px; background:#f5f5f5; border-radius:8px; overflow:hidden; }
-    .detail-img { width:100%; height:100%; object-fit:cover; }
+    .detail-carousel { border-radius:8px; overflow:hidden; background:#f5f5f5; }
+    .detail-img-wrapper { width:100%; height:520px; }
+    .detail-img { width:100%; height:520px; object-fit:cover; }
+    .detail-carousel .carousel-control-prev,
+    .detail-carousel .carousel-control-next { width:12%; }
+    .detail-carousel .carousel-control-prev-icon,
+    .detail-carousel .carousel-control-next-icon {
+        background-color: rgba(0,0,0,0.45);
+        border-radius: 50%;
+        background-size: 55%;
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+    .detail-carousel-indicators { margin-bottom: 0.7rem; }
+    .detail-carousel-indicators [data-bs-target] {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 0;
+        opacity: 0.65;
+    }
     .detail-brand { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.15em; color:#888; margin-bottom:4px; }
     .detail-name { font-family:'Georgia',serif; font-size:1.6rem; font-weight:400; line-height:1.3; color:#1a1a1a; }
     .detail-price { font-size:1.5rem; font-weight:600; color:#1a1a1a; }
     .detail-description { font-size:0.95rem; line-height:1.8; color:#444; }
     .add-cart-btn { letter-spacing:0.08em; padding:14px; font-size:0.95rem; }
+    .wishlist-detail-btn.active {
+        border-color: #f1c9cf;
+        background: #fff7f8;
+        color: #c71f37;
+    }
     .related-title { font-family:'Georgia',serif; font-weight:400; }
     .related-img-wrapper { height:220px; overflow:hidden; background:#f5f5f5; }
     .related-img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease; }
@@ -165,6 +293,13 @@ $related = array_slice($related, 0, 3);
     .product-card:hover .related-img { transform:scale(1.05); }
     .product-brand { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:#888; }
     .product-price { font-size:1rem; font-weight:600; color:#1a1a1a; }
+
+    @media (max-width: 768px) {
+        .detail-img-wrapper,
+        .detail-img {
+            height: 360px;
+        }
+    }
 </style>
 
 <?php include 'includes/footer.php'; ?>

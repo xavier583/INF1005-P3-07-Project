@@ -1,6 +1,30 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+    $_SESSION['wishlist'] = [];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
+    $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+    $key = array_search($pid, $_SESSION['wishlist'], true);
+
+    if ($key === false) {
+        $_SESSION['wishlist'][] = $pid;
+    } else {
+        unset($_SESSION['wishlist'][$key]);
+        $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+    }
+
+    $redirectTo = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : 'products.php';
+    if (strpos($redirectTo, 'products.php') !== 0) {
+        $redirectTo = 'products.php';
+    }
+
+    header('Location: ' . $redirectTo);
+    exit;
+}
+
 // ─── Product Data ─────────────────────────────────────────────────────────────
 $products = [
     // WATCHES
@@ -25,12 +49,16 @@ $products = [
     // SHOES
     ['id'=>11,'name'=>'Gucci Wine n Dance Heels','price'=>7800.00,'image'=>'shoes/gucci 1.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Bold and theatrical, these Gucci heels in rich burgundy leather are made for the woman who commands every room. Featuring the iconic double-G hardware and signature stiletto heel.'],
     ['id'=>12,'name'=>'Gucci Corporate Beige Flops','price'=>12500.00,'image'=>'shoes/gucci 2.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Effortless corporate luxury in nude beige. Crafted from supple calfskin with a padded footbed and the Gucci monogram discreetly embossed at the insole.'],
-    ['id'=>13,'name'=>'Gucci V Black Sandals','price'=>9500.00,'image'=>'shoes/gucci 3.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Sleek black leather sandals with a geometric V-strap silhouette and gold-toned Gucci buckle. The perfect complement to both evening wear and resort collections.'],
+    ['id'=>13,'name'=>'Gucci V Black Sandals','price'=>9500.00,'image'=>'shoes/gucci 3.jpeg','category'=>'Shoes','brand'=>'Gucci','description'=>'Sleek black leather sandals with a geometric V-strap silhouette and gold-toned Gucci buckle.'],
+    ['id'=>36,'name'=>'Dior B23 League Low-Top Sneaker','price'=>1200.00,'image'=>'shoes/diorlow_shoes.png','category'=>'Shoes','brand'=>'Dior','description'=>'The Dior B23 League low-top sneaker in premium leather with the signature Dior logo. A versatile and comfortable choice for everyday wear.'],
+    ['id'=>37,'name'=>'Dior B23 League High-Top Sneaker','price'=>1500.00,'image'=>'shoes/diorhigh_shoes.png','category'=>'Shoes','brand'=>'Dior','description'=>'The Dior B23 League high-top sneaker in premium leather with the signature Dior logo. A versatile and comfortable choice for everyday wear.'],
 
     // CLOTHES
     ['id'=>14,'name'=>'Chanel Classic Plaited Dress','price'=>9500.00,'image'=>'clothes/chanel 1.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'An exquisite piece from Chanel\'s atelier featuring the house\'s signature plaited braid trim. Crafted from double-faced wool, this dress embodies understated Parisian chic.'],
     ['id'=>15,'name'=>'Chanel Bosswoman Suit','price'=>16000.00,'image'=>'clothes/chanel 2.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Power and femininity in perfect balance. This iconic Chanel tweed suit features contrast trim, gold-toned buttons, and a structured silhouette. A wardrobe cornerstone for the modern woman.'],
     ['id'=>16,'name'=>'Chanel Plaited Knit Sweater','price'=>12500.00,'image'=>'clothes/chanel 3.jpeg','category'=>'Clothes','brand'=>'Chanel','description'=>'Luxurious cashmere-blend knit with Chanel\'s signature plaited detailing at the cuffs and hem. Effortlessly elegant and impeccably soft — the definition of quiet luxury.'],
+    ['id'=>38,'name'=>'Louis Vuitton Flared Sleeve Lavallière Blouse','price'=>2500.00,'image'=>'clothes/lv_clothes.png','category'=>'Clothes','brand'=>'Louis Vuitton','description'=>'The iconic Louis Vuitton flared sleeve lavallière blouse in premium cotton with the signature LV monogram. A timeless piece that combines elegance with modern sophistication.'],
+    ['id'=>39,'name'=>'Prada Cropped Cotton Cardigan','price'=>1800.00,'image'=>'clothes/prada_clothes.png','category'=>'Clothes','brand'=>'Prada','description'=>'A chic cropped cardigan in soft cotton with Prada\'s signature logo buttons. Perfect for layering or wearing on its own for a touch of understated luxury.'],
 
     // JEWELLERY
     ['id'=>17,'name'=>'Cartier Love 18k Yellow Gold Bracelet','price'=>14870.00,'image'=>'jewellery/cartier_bracelet.jpg','category'=>'Jewellery','brand'=>'Cartier','description'=>'The iconic Cartier Love bracelet in 18k yellow gold. A symbol of eternal devotion, secured with a screwdriver — a timeless declaration of love worn by icons worldwide.'],
@@ -45,6 +73,10 @@ $products = [
     ['id'=>24,'name'=>'YSL Cat Print Shades','price'=>650.00,'image'=>'accessories/ysl 2.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'A bold cat-eye silhouette with the Saint Laurent logo in gold-toned hardware. Crafted in Italian acetate — the ultimate accessory for the fashion-forward woman.'],
     ['id'=>25,'name'=>'YSL Snow Sunnies Midnight','price'=>950.00,'image'=>'accessories/ysl 3.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'Shield-style sunglasses in Midnight Black with mirrored lenses. Futuristic and fierce — a statement piece from Saint Laurent\'s avant-garde eyewear line.'],
     ['id'=>26,'name'=>'YSL Snow Sunnies Sunlight','price'=>950.00,'image'=>'accessories/ysl 4.jpeg','category'=>'Accessories','brand'=>'Saint Laurent','description'=>'The same iconic shield silhouette in gold-tinted lenses with a champagne frame. Luminous and commanding — made for those who prefer their luxury sun-kissed.'],
+    ['id'=>32,'name'=>'Gucci Belt with Interlocking G Buckle','price'=>450.00,'image'=>'accessories/gucci_belt.png','category'=>'Accessories','brand'=>'Gucci','description'=>'The iconic Gucci belt in black leather with the signature interlocking G buckle in palladium-toned hardware. A versatile accessory that elevates any outfit with a touch of Italian luxury.'],
+    ['id'=>33,'name'=>'Gucci Reversible belt with Interlocking G Buckle','price'=>550.00,'image'=>'accessories/gucci_reversible_belt.png','category'=>'Accessories','brand'=>'Gucci','description'=>'The ultimate in versatility, this reversible Gucci belt features the iconic interlocking G buckle in palladium-toned hardware. One side in classic black leather, the other in rich brown'],
+    ['id'=>34,'name'=>'Celine Triomphe Cap in Cotton Canvas','price'=>350.00,'image'=>'accessories/celine_cap.png','category'=>'Accessories','brand'=>'Celine','description'=>'The Triomphe cap in durable cotton canvas with the signature Celine Triomphe motif embroidered on the front. A stylish and practical accessory for sunny days.'],
+    ['id'=>35,'name'=>'Miu Miu Denim Baseball Cap in Beige/Amaranth','price'=>550.00,'image'=>'accessories/miumiu_cap.png','category'=>'Accessories','brand'=>'Miu Miu','description'=>'A classic baseball cap in soft denim with the signature Miu Miu logo on the front. Perfect for adding a touch of effortless style to any casual outfit.']
 ];
 
 // ─── Category definitions with banner images ──────────────────────────────────
@@ -60,9 +92,37 @@ $categories = [
 // ─── Determine view mode ──────────────────────────────────────────────────────
 $activeCategory = isset($_GET['category']) ? $_GET['category'] : null;
 $showGrid       = $activeCategory && array_key_exists($activeCategory, $categories);
+$searchQuery    = isset($_GET['search']) ? trim($_GET['search']) : '';
+$showWishlist   = isset($_GET['wishlist']) && $_GET['wishlist'] === '1';
+$wishlistIds    = array_map('intval', $_SESSION['wishlist']);
+$currentUrl     = 'products.php' . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
 
 $filtered = $showGrid
-    ? array_filter($products, fn($p) => $p['category'] === $activeCategory)
+    ? array_values(array_filter($products, function ($p) use ($activeCategory, $searchQuery) {
+        if ($p['category'] !== $activeCategory) {
+            return false;
+        }
+
+        if ($searchQuery === '') {
+            return true;
+        }
+
+        return stripos($p['name'], $searchQuery) !== false
+            || stripos($p['brand'], $searchQuery) !== false
+            || stripos($p['description'], $searchQuery) !== false;
+    }))
+    : [];
+
+$globalFiltered = (!$showGrid && $searchQuery !== '')
+    ? array_values(array_filter($products, function ($p) use ($searchQuery) {
+        return stripos($p['name'], $searchQuery) !== false
+            || stripos($p['brand'], $searchQuery) !== false
+            || stripos($p['description'], $searchQuery) !== false;
+    }))
+    : [];
+
+$wishlistProducts = $showWishlist
+    ? array_values(array_filter($products, fn($p) => in_array((int)$p['id'], $wishlistIds, true)))
     : [];
 ?>
 
@@ -71,7 +131,51 @@ $filtered = $showGrid
 
 <main class="container my-5">
 
-<?php if (!$showGrid): ?>
+<?php if ($showWishlist): ?>
+    <div class="text-center mb-5">
+        <h1 class="products-title">Your Wishlist</h1>
+        <p class="text-muted" style="font-size:1.05em;">Items you hearted will appear here.</p>
+        <a href="products.php" class="btn btn-outline-dark btn-sm mt-2">← Back to Products</a>
+    </div>
+
+    <?php if (empty($wishlistProducts)): ?>
+        <p class="text-center text-muted">Your wishlist is empty. Tap the heart icon on a product to save it.</p>
+    <?php else: ?>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <?php foreach ($wishlistProducts as $product): ?>
+            <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
+            <div class="col">
+                <div class="product-tile position-relative">
+                    <form method="POST" class="wishlist-toggle-form">
+                        <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                        <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                        <button type="submit" name="toggle_wishlist" class="wishlist-btn active" aria-label="Remove from wishlist">
+                            <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                        </button>
+                    </form>
+                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <div class="product-img-wrapper">
+                                <img
+                                    src="images/<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['name']) ?>"
+                                    class="card-img-top product-img"
+                                >
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+<?php elseif (!$showGrid): ?>
 <!-- ═══════════════════════════════════════════════════════════
      VIEW 1: Category Landing (image cards)
 ══════════════════════════════════════════════════════════════ -->
@@ -79,6 +183,24 @@ $filtered = $showGrid
         <h1 class="products-title">Our Products</h1>
         <p class="text-muted" style="font-size:1.1em;">Browse our collection of luxury secondhand goods.</p>
         <h2 class="categories-subtitle mt-4">Categories</h2>
+
+        <!-- Search all products -->
+        <form method="GET" action="products.php" class="product-search-form mt-4 mb-4">
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="search"
+                    value="<?= htmlspecialchars($searchQuery) ?>"
+                    class="form-control"
+                    placeholder="Search all products by name, brand, or keyword"
+                    aria-label="Search all products"
+                >
+                <button type="submit" class="btn btn-dark">Search</button>
+                <?php if ($searchQuery !== ''): ?>
+                    <a href="products.php" class="btn btn-outline-secondary">Clear</a>
+                <?php endif; ?>
+            </div>
+        </form>
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center mb-5">
@@ -99,6 +221,49 @@ $filtered = $showGrid
         </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if ($searchQuery !== ''): ?>
+        <div class="mb-3 text-center text-muted small">
+            <?= count($globalFiltered) ?> result<?= count($globalFiltered) === 1 ? '' : 's' ?> for "<?= htmlspecialchars($searchQuery) ?>"
+        </div>
+
+        <?php if (empty($globalFiltered)): ?>
+            <p class="text-center text-muted mb-5">No products match your search.</p>
+        <?php else: ?>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                <?php foreach ($globalFiltered as $product): ?>
+                <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
+                <div class="col">
+                    <div class="product-tile position-relative">
+                        <form method="POST" class="wishlist-toggle-form">
+                            <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                            <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                            <button type="submit" name="toggle_wishlist" class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>" aria-label="<?= $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' ?>">
+                                <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                            </button>
+                        </form>
+                        <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                            <div class="card h-100 product-card border-0 shadow-sm">
+                                <div class="product-img-wrapper">
+                                    <img
+                                        src="images/<?= htmlspecialchars($product['image']) ?>"
+                                        alt="<?= htmlspecialchars($product['name']) ?>"
+                                        class="card-img-top product-img"
+                                    >
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                    <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                    <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
 
 <?php else: ?>
 <!-- ═══════════════════════════════════════════════════════════
@@ -122,7 +287,7 @@ $filtered = $showGrid
          style="background-image: url('images/<?= htmlspecialchars($categories[$activeCategory]) ?>');">
         <div class="category-banner-overlay">
             <h1 class="category-banner-title"><?= htmlspecialchars($activeCategory) ?></h1>
-            <p class="category-banner-sub"><?= count($filtered) ?> items available</p>
+            <p class="category-banner-sub"><?= count($filtered) ?> items available<?= $searchQuery !== '' ? ' for &quot;' . htmlspecialchars($searchQuery) . '&quot;' : '' ?></p>
         </div>
     </div>
 
@@ -141,27 +306,39 @@ $filtered = $showGrid
 
     <!-- Product Grid -->
     <?php if (empty($filtered)): ?>
-        <p class="text-center text-muted">No products found in this category.</p>
+        <p class="text-center text-muted">
+            No products found<?= $searchQuery !== '' ? ' for &quot;' . htmlspecialchars($searchQuery) . '&quot;' : '' ?> in this category.
+        </p>
     <?php else: ?>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <?php foreach ($filtered as $product): ?>
+            <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
             <div class="col">
-                <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
-                    <div class="card h-100 product-card border-0 shadow-sm">
-                        <div class="product-img-wrapper">
-                            <img
-                                src="images/<?= htmlspecialchars($product['image']) ?>"
-                                alt="<?= htmlspecialchars($product['name']) ?>"
-                                class="card-img-top product-img"
-                            >
+                <div class="product-tile position-relative">
+                    <form method="POST" class="wishlist-toggle-form">
+                        <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                        <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                        <button type="submit" name="toggle_wishlist" class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>" aria-label="<?= $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' ?>">
+                            <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                        </button>
+                    </form>
+                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <div class="product-img-wrapper">
+                                <img
+                                    src="images/<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['name']) ?>"
+                                    class="card-img-top product-img"
+                                >
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                            </div>
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
-                            <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
-                            <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -260,6 +437,47 @@ $filtered = $showGrid
         font-size: 0.9rem;
         margin-top: 6px;
         margin-bottom: 0;
+    }
+    .product-search-form {
+        max-width: 760px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .product-search-form .input-group .form-control {
+        min-height: 46px;
+    }
+    .product-tile {
+        height: 100%;
+    }
+    .wishlist-toggle-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 5;
+        margin: 0;
+        width: auto;
+    }
+    .wishlist-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #dedede;
+        background: rgba(255,255,255,0.95);
+        color: #333;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    .wishlist-btn:hover {
+        border-color: #1a1a1a;
+        color: #1a1a1a;
+    }
+    .wishlist-btn.active {
+        color: #c71f37;
+        border-color: #f1c9cf;
+        background: #fff7f8;
     }
     /* Product Cards */
     .product-card {

@@ -1,3 +1,9 @@
+<?php
+if (!isset($rootPath) || $rootPath === '') {
+	$rootPath = '.';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
