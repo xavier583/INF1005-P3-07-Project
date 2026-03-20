@@ -47,7 +47,7 @@ else{
     }
         
 }
-echo "<div class='response'>";
+echo "<div class='response text-center my-5'>";
 if ($success)
     {
     saveMemberToDB();
@@ -119,6 +119,13 @@ $conn->close();
 }
 
 ?>
+<style>
+    .response {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
  <?php
     include "includes/footer.php";
     ?>
