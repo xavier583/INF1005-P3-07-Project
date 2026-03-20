@@ -5,11 +5,16 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 $cartCount = 0;
+$wishlistCount = 0;
 
 if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $item) {
         $cartCount += isset($item['quantity']) ? (int)$item['quantity'] : 1;
     }
+}
+
+if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
+    $wishlistCount = count($_SESSION['wishlist']);
 }
 ?>
 
@@ -41,11 +46,24 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'products.php' && isset($_GET['wishlist']) && $_GET['wishlist'] === '1') echo 'active'; ?>" href="<?php echo $rootPath; ?>/products.php?wishlist=1">
+                        <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-heart"></i>
+                        <?php if ($wishlistCount > 0): ?>
+                        <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
+                            <?= $wishlistCount > 99 ? '99+' : $wishlistCount ?>
+                        </span>
+                        <?php endif; ?>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link icon-nav-link <?php if($currentPage == 'cart.php') echo 'active'; ?>" href="<?php echo $rootPath; ?>/cart.php">
                         <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
                             <i class="bi bi-cart"></i>
                         <?php if ($cartCount > 0): ?>
-                        <span class="cart-count-badge position-absolute badge rounded-pill bg-dark">
+                        <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
                             <?= $cartCount > 99 ? '99+' : $cartCount ?>
                         </span>
                         <?php endif; ?>
@@ -81,7 +99,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
         overflow: visible;
     }
 
-    .cart-count-badge {
+    .icon-count-badge {
         top: 0;
         right: 0;
         transform: translate(55%, -45%);

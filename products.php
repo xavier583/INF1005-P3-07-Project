@@ -1,6 +1,30 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+    $_SESSION['wishlist'] = [];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
+    $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+    $key = array_search($pid, $_SESSION['wishlist'], true);
+
+    if ($key === false) {
+        $_SESSION['wishlist'][] = $pid;
+    } else {
+        unset($_SESSION['wishlist'][$key]);
+        $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+    }
+
+    $redirectTo = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : 'products.php';
+    if (strpos($redirectTo, 'products.php') !== 0) {
+        $redirectTo = 'products.php';
+    }
+
+    header('Location: ' . $redirectTo);
+    exit;
+}
+
 // ─── Product Data ─────────────────────────────────────────────────────────────
 $products = [
     // WATCHES
@@ -69,6 +93,9 @@ $categories = [
 $activeCategory = isset($_GET['category']) ? $_GET['category'] : null;
 $showGrid       = $activeCategory && array_key_exists($activeCategory, $categories);
 $searchQuery    = isset($_GET['search']) ? trim($_GET['search']) : '';
+$showWishlist   = isset($_GET['wishlist']) && $_GET['wishlist'] === '1';
+$wishlistIds    = array_map('intval', $_SESSION['wishlist']);
+$currentUrl     = 'products.php' . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
 
 $filtered = $showGrid
     ? array_values(array_filter($products, function ($p) use ($activeCategory, $searchQuery) {
@@ -93,6 +120,10 @@ $globalFiltered = (!$showGrid && $searchQuery !== '')
             || stripos($p['description'], $searchQuery) !== false;
     }))
     : [];
+
+$wishlistProducts = $showWishlist
+    ? array_values(array_filter($products, fn($p) => in_array((int)$p['id'], $wishlistIds, true)))
+    : [];
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -100,7 +131,51 @@ $globalFiltered = (!$showGrid && $searchQuery !== '')
 
 <main class="container my-5">
 
-<?php if (!$showGrid): ?>
+<?php if ($showWishlist): ?>
+    <div class="text-center mb-5">
+        <h1 class="products-title">Your Wishlist</h1>
+        <p class="text-muted" style="font-size:1.05em;">Items you hearted will appear here.</p>
+        <a href="products.php" class="btn btn-outline-dark btn-sm mt-2">← Back to Products</a>
+    </div>
+
+    <?php if (empty($wishlistProducts)): ?>
+        <p class="text-center text-muted">Your wishlist is empty. Tap the heart icon on a product to save it.</p>
+    <?php else: ?>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <?php foreach ($wishlistProducts as $product): ?>
+            <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
+            <div class="col">
+                <div class="product-tile position-relative">
+                    <form method="POST" class="wishlist-toggle-form">
+                        <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                        <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                        <button type="submit" name="toggle_wishlist" class="wishlist-btn active" aria-label="Remove from wishlist">
+                            <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                        </button>
+                    </form>
+                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <div class="product-img-wrapper">
+                                <img
+                                    src="images/<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['name']) ?>"
+                                    class="card-img-top product-img"
+                                >
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+<?php elseif (!$showGrid): ?>
 <!-- ═══════════════════════════════════════════════════════════
      VIEW 1: Category Landing (image cards)
 ══════════════════════════════════════════════════════════════ -->
@@ -157,23 +232,33 @@ $globalFiltered = (!$showGrid && $searchQuery !== '')
         <?php else: ?>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
                 <?php foreach ($globalFiltered as $product): ?>
+                <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
                 <div class="col">
-                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
-                        <div class="card h-100 product-card border-0 shadow-sm">
-                            <div class="product-img-wrapper">
-                                <img
-                                    src="images/<?= htmlspecialchars($product['image']) ?>"
-                                    alt="<?= htmlspecialchars($product['name']) ?>"
-                                    class="card-img-top product-img"
-                                >
+                    <div class="product-tile position-relative">
+                        <form method="POST" class="wishlist-toggle-form">
+                            <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                            <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                            <button type="submit" name="toggle_wishlist" class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>" aria-label="<?= $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' ?>">
+                                <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                            </button>
+                        </form>
+                        <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                            <div class="card h-100 product-card border-0 shadow-sm">
+                                <div class="product-img-wrapper">
+                                    <img
+                                        src="images/<?= htmlspecialchars($product['image']) ?>"
+                                        alt="<?= htmlspecialchars($product['name']) ?>"
+                                        class="card-img-top product-img"
+                                    >
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                    <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                    <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                                </div>
                             </div>
-                            <div class="card-body d-flex flex-column">
-                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
-                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
-                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -227,23 +312,33 @@ $globalFiltered = (!$showGrid && $searchQuery !== '')
     <?php else: ?>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <?php foreach ($filtered as $product): ?>
+            <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
             <div class="col">
-                <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
-                    <div class="card h-100 product-card border-0 shadow-sm">
-                        <div class="product-img-wrapper">
-                            <img
-                                src="images/<?= htmlspecialchars($product['image']) ?>"
-                                alt="<?= htmlspecialchars($product['name']) ?>"
-                                class="card-img-top product-img"
-                            >
+                <div class="product-tile position-relative">
+                    <form method="POST" class="wishlist-toggle-form">
+                        <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                        <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                        <button type="submit" name="toggle_wishlist" class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>" aria-label="<?= $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' ?>">
+                            <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                        </button>
+                    </form>
+                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <div class="product-img-wrapper">
+                                <img
+                                    src="images/<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['name']) ?>"
+                                    class="card-img-top product-img"
+                                >
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                            </div>
                         </div>
-                        <div class="card-body d-flex flex-column">
-                            <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
-                            <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
-                            <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -351,6 +446,38 @@ $globalFiltered = (!$showGrid && $searchQuery !== '')
     }
     .product-search-form .input-group .form-control {
         min-height: 46px;
+    }
+    .product-tile {
+        height: 100%;
+    }
+    .wishlist-toggle-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 5;
+        margin: 0;
+        width: auto;
+    }
+    .wishlist-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #dedede;
+        background: rgba(255,255,255,0.95);
+        color: #333;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    .wishlist-btn:hover {
+        border-color: #1a1a1a;
+        color: #1a1a1a;
+    }
+    .wishlist-btn.active {
+        color: #c71f37;
+        border-color: #f1c9cf;
+        background: #fff7f8;
     }
     /* Product Cards */
     .product-card {

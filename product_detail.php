@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+    $_SESSION['wishlist'] = [];
+}
+
 // ─── Product Data (must match products.php) ───────────────────────────────────
 $products = [
     ['id'=>1,'name'=>'Rolex Submariner Ceramic Bezel','price'=>20500.00,'image'=>'watches/rolex 1.jpeg','category'=>'Watches','brand'=>'Rolex','description'=>'A legendary diver\'s watch with a unidirectional rotatable bezel and Cerachrom ceramic insert. Water-resistant to 300 metres, powered by the calibre 3235 movement. A timeless icon of precision and luxury.'],
@@ -52,6 +56,21 @@ foreach ($products as $p) {
 }
 if (!$product) { header('Location: products.php'); exit; }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
+    $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+    $key = array_search($pid, $_SESSION['wishlist'], true);
+
+    if ($key === false) {
+        $_SESSION['wishlist'][] = $pid;
+    } else {
+        unset($_SESSION['wishlist'][$key]);
+        $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+    }
+
+    header('Location: product_detail.php?id=' . $id);
+    exit;
+}
+
 function buildProductGalleryImages($imagePath)
 {
     $gallery = [];
@@ -92,6 +111,7 @@ function buildProductGalleryImages($imagePath)
 }
 
 $galleryImages = buildProductGalleryImages($product['image']);
+$isWishlisted = in_array((int)$product['id'], array_map('intval', $_SESSION['wishlist']), true);
 
 // ─── Handle Add to Cart ───────────────────────────────────────────────────────
 $cartMessage = '';
@@ -191,6 +211,13 @@ $related = array_slice($related, 0, 3);
                     Add to Cart
                 </button>
             </form>
+            <form method="POST" action="" class="mt-2">
+                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                <button type="submit" name="toggle_wishlist" class="btn btn-outline-dark w-100 wishlist-detail-btn <?= $isWishlisted ? 'active' : '' ?>">
+                    <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
+                    <?= $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' ?>
+                </button>
+            </form>
             <a href="products.php?category=<?= urlencode($product['category']) ?>" class="btn btn-outline-dark mt-3 w-100">
                 ← Back to <?= htmlspecialchars($product['category']) ?>
             </a>
@@ -253,6 +280,11 @@ $related = array_slice($related, 0, 3);
     .detail-price { font-size:1.5rem; font-weight:600; color:#1a1a1a; }
     .detail-description { font-size:0.95rem; line-height:1.8; color:#444; }
     .add-cart-btn { letter-spacing:0.08em; padding:14px; font-size:0.95rem; }
+    .wishlist-detail-btn.active {
+        border-color: #f1c9cf;
+        background: #fff7f8;
+        color: #c71f37;
+    }
     .related-title { font-family:'Georgia',serif; font-weight:400; }
     .related-img-wrapper { height:220px; overflow:hidden; background:#f5f5f5; }
     .related-img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease; }
