@@ -59,7 +59,7 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
     <div class="row g-5">
 
         <!-- Cart Items -->
-        <div class="col-lg-8">
+        <div class="col-md-8 mb-4 mb-md-0">
 
             <!-- Column Headers -->
             <div class="row gx-0 d-none d-md-flex text-muted small text-uppercase mb-2 px-2" style="letter-spacing:0.08em;">
@@ -142,7 +142,7 @@ $itemCount = array_sum(array_column($cart, 'quantity'));
         </div>
 
         <!-- Order Summary -->
-        <div class="col-lg-4">
+        <div class="col-md-4">
             <div class="summary-card p-4">
                 <h5 class="summary-title mb-4">Order Summary</h5>
 
