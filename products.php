@@ -68,9 +68,30 @@ $categories = [
 // ─── Determine view mode ──────────────────────────────────────────────────────
 $activeCategory = isset($_GET['category']) ? $_GET['category'] : null;
 $showGrid       = $activeCategory && array_key_exists($activeCategory, $categories);
+$searchQuery    = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 $filtered = $showGrid
-    ? array_filter($products, fn($p) => $p['category'] === $activeCategory)
+    ? array_values(array_filter($products, function ($p) use ($activeCategory, $searchQuery) {
+        if ($p['category'] !== $activeCategory) {
+            return false;
+        }
+
+        if ($searchQuery === '') {
+            return true;
+        }
+
+        return stripos($p['name'], $searchQuery) !== false
+            || stripos($p['brand'], $searchQuery) !== false
+            || stripos($p['description'], $searchQuery) !== false;
+    }))
+    : [];
+
+$globalFiltered = (!$showGrid && $searchQuery !== '')
+    ? array_values(array_filter($products, function ($p) use ($searchQuery) {
+        return stripos($p['name'], $searchQuery) !== false
+            || stripos($p['brand'], $searchQuery) !== false
+            || stripos($p['description'], $searchQuery) !== false;
+    }))
     : [];
 ?>
 
@@ -87,6 +108,24 @@ $filtered = $showGrid
         <h1 class="products-title">Our Products</h1>
         <p class="text-muted" style="font-size:1.1em;">Browse our collection of luxury secondhand goods.</p>
         <h2 class="categories-subtitle mt-4">Categories</h2>
+
+        <!-- Search all products -->
+        <form method="GET" action="products.php" class="product-search-form mt-4 mb-4">
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="search"
+                    value="<?= htmlspecialchars($searchQuery) ?>"
+                    class="form-control"
+                    placeholder="Search all products by name, brand, or keyword"
+                    aria-label="Search all products"
+                >
+                <button type="submit" class="btn btn-dark">Search</button>
+                <?php if ($searchQuery !== ''): ?>
+                    <a href="products.php" class="btn btn-outline-secondary">Clear</a>
+                <?php endif; ?>
+            </div>
+        </form>
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center mb-5">
@@ -107,6 +146,39 @@ $filtered = $showGrid
         </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if ($searchQuery !== ''): ?>
+        <div class="mb-3 text-center text-muted small">
+            <?= count($globalFiltered) ?> result<?= count($globalFiltered) === 1 ? '' : 's' ?> for "<?= htmlspecialchars($searchQuery) ?>"
+        </div>
+
+        <?php if (empty($globalFiltered)): ?>
+            <p class="text-center text-muted mb-5">No products match your search.</p>
+        <?php else: ?>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                <?php foreach ($globalFiltered as $product): ?>
+                <div class="col">
+                    <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
+                        <div class="card h-100 product-card border-0 shadow-sm">
+                            <div class="product-img-wrapper">
+                                <img
+                                    src="images/<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['name']) ?>"
+                                    class="card-img-top product-img"
+                                >
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <p class="product-brand mb-1"><?= htmlspecialchars($product['brand']) ?></p>
+                                <h6 class="card-title product-name"><?= htmlspecialchars($product['name']) ?></h6>
+                                <p class="product-price mt-auto mb-0">$<?= number_format($product['price'], 2) ?></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
 
 <?php else: ?>
 <!-- ═══════════════════════════════════════════════════════════
@@ -130,7 +202,7 @@ $filtered = $showGrid
          style="background-image: url('images/<?= htmlspecialchars($categories[$activeCategory]) ?>');">
         <div class="category-banner-overlay">
             <h1 class="category-banner-title"><?= htmlspecialchars($activeCategory) ?></h1>
-            <p class="category-banner-sub"><?= count($filtered) ?> items available</p>
+            <p class="category-banner-sub"><?= count($filtered) ?> items available<?= $searchQuery !== '' ? ' for &quot;' . htmlspecialchars($searchQuery) . '&quot;' : '' ?></p>
         </div>
     </div>
 
@@ -149,7 +221,9 @@ $filtered = $showGrid
 
     <!-- Product Grid -->
     <?php if (empty($filtered)): ?>
-        <p class="text-center text-muted">No products found in this category.</p>
+        <p class="text-center text-muted">
+            No products found<?= $searchQuery !== '' ? ' for &quot;' . htmlspecialchars($searchQuery) . '&quot;' : '' ?> in this category.
+        </p>
     <?php else: ?>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <?php foreach ($filtered as $product): ?>
@@ -268,6 +342,15 @@ $filtered = $showGrid
         font-size: 0.9rem;
         margin-top: 6px;
         margin-bottom: 0;
+    }
+    .product-search-form {
+        max-width: 760px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .product-search-form .input-group .form-control {
+        min-height: 46px;
     }
     /* Product Cards */
     .product-card {
