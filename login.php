@@ -11,11 +11,11 @@ include 'includes/header.php';
     </p>
     <form action="process_login.php" method="post">
         <div class="form-group">
-        <label for="fname">Username:</label>
+        <label for="username">Username:</label>
         <input type="username" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required>
         <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $username = $_POST["fname"];
+            $username = $_POST["username"];
             if (!preg_match("/^[a-zA-Z0-9_]{4,20}$/", $username)) {
                 echo "<p style='color: red;'>Username must be between 4 and 20 characters and can only contain letters, numbers, and underscores.</p>";
             }

@@ -10,11 +10,11 @@ include 'includes/header.php';
         Have an account? <a href="login.php">Sign in</a>
     </p>
     <div class="form-group">
-        <label for="fname">Username:</label>
+        <label for="username">Username:</label>
         <input type="username" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required>
         <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $username = $_POST["fname"];
+            $username = $_POST["username"];
             if (!preg_match("/^[a-zA-Z0-9_]{4,20}$/", $username)) {
                 echo "<p style='color: red;'>Username must be between 4 and 20 characters and can only contain letters, numbers, and underscores.</p>";
             }
@@ -24,21 +24,21 @@ include 'includes/header.php';
     </div>
     <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter email">
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
     </div>
 
     <div class="form-group">
         <label for="pwd">Password:</label>
-        <input type="password" id="pwd" name="pwd" placeholder="Enter password">
+        <input type="password" id="pwd" name="pwd" placeholder="Enter password" required>
     </div>
 
     <div class="form-group">
         <label for="pwd_confirm">Confirm Password:</label>
-        <input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Confirm password">
+        <input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Confirm password" required>
     </div>
 
     <div class="form-group checkbox">
-        <input type="checkbox" name="agree" id="agree">
+        <input type="checkbox" name="agree" id="agree" required>
         <label for="agree">Agree to terms and conditions</label>
     </div>
 

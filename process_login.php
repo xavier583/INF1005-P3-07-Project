@@ -13,7 +13,7 @@ echo "<div class='response'>";
 authenticateUser();
 if ($success) {
     echo "<h4>Login successful!</h4>";
-    echo "<h5>Welcome back, "  . $fname . " " . $lname . "</h5>";
+    echo "<h5>Welcome back, "  . $username . "</h5>";
     echo " <a href = 'index.php' class='btn ms-auto'> Return to home </a>";
 } else {
     echo "<h4>The following input errors were detected:</h4>";
@@ -24,7 +24,7 @@ echo "</div>";
 
 function authenticateUser()
 {
-global $fname, $lname, $email, $pwd_hashed, $errorMsg, $success;
+global $username, $email, $pwd_hashed, $errorMsg, $success;
 // Create database connection.
 $config = parse_ini_file('/var/www/private/db_config.ini');
 if (!$config)
@@ -58,8 +58,7 @@ if ($result->num_rows > 0)
 {
 // Note that email field is unique, so should only have one row.
 $row = $result->fetch_assoc();
-$fname = $row["fname"];
-$lname = $row["lname"];
+$username = $row["username"];
 $pwd_hashed = $row["password"];
 // Check if the password matches:
 if (!password_verify($_POST["pwd"], $pwd_hashed))

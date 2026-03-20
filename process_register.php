@@ -10,24 +10,17 @@ ini_set('display_errors', 1);
 $fname = $lname = $email = $pwd = $pwd_confirm = $errorMsg = "";
 $success = true;
 
-if (empty($_POST["fname"])){
-    $errorMsg .= "Name is required.<br>";
+if (empty($_POST["username"])){
+    $errorMsg .= "username is required.<br>";
     $success = false;   
 } else {
-    $fname = sanitize_input($_POST["fname"]);
-    if (!filter_var($_POST["fname"],FILTER_SANITIZE_SPECIAL_CHARS)){
+    $username = sanitize_input($_POST["username"]);
+    if (!filter_var($_POST["username"],FILTER_SANITIZE_SPECIAL_CHARS)){
         $errorMsg .=  "Invalid name format.";
         $success = false;
     }
 }
-if (!empty($_POST["lname"])){
-    $lname = sanitize_input($_POST["lname"]);
-     if (!filter_var($_POST["lname"],FILTER_SANITIZE_SPECIAL_CHARS)){
-        $errorMsg .=  "Invalid name format.";
-        $success = false;
-    }
-    
-}
+
 if (empty($_POST["email"])) {
     $errorMsg .= "Email is required.<br>";
     $success = false;
@@ -84,7 +77,7 @@ function sanitize_input($data)
 */
 function saveMemberToDB()
 {
-global $fname, $lname, $email, $pwd_hashed, $errorMsg, $success;
+global $username, $email, $pwd_hashed, $errorMsg, $success;
 // Create database connection.
 $config = parse_ini_file('/var/www/private/db_config.ini');
 if (!$config)
@@ -110,9 +103,9 @@ else
 {
 // Prepare the statement:
 $stmt = $conn->prepare("INSERT INTO maison_reluxe_members
-(fname, lname, email, password) VALUES (?, ?, ?, ?)");
+(username, email, password) VALUES (?, ?, ?, ?)");
 // Bind & execute the query statement:
-$stmt->bind_param("ssss", $fname, $lname, $email, $pwd_hashed);
+$stmt->bind_param("ssss", $username, $email, $pwd_hashed);
 if (!$stmt->execute())
 {
 $errorMsg = "Execute failed: (" . $stmt->errno . ") " .
