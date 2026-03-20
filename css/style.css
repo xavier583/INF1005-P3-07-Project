@@ -328,6 +328,12 @@ input, select {
     margin-bottom: 20px;
 }
 
+.field-error {
+    color: red;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
 .error-box ul {
     margin: 0;
     padding-left: 20px;
