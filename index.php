@@ -12,9 +12,10 @@ include 'includes/header.php';
     </video>
 
     <div class="hero-overlay">
-        <h1 class="Maison Reluxe">Maison Reluxe</h1>
+        <img src = "images/logo.jpg" alt="Maison Reluxe Logo" class="hero-logo">
         <p> Curated Luxury, Timeless Style. </p>
         <a href = "products.php" class="mainpage-btn">Explore Collection</a>
+        <button id = "video-control" class="video-control" aria-label="Pause Video">❚❚</button>
     </div>
 </section>
 
@@ -56,3 +57,4 @@ include 'includes/header.php';
 
 <?php include 'includes/footer.php'; ?>
 <script src = "js/slideshow.js"></script>
+<script src = "js/videoControl.js"></script>
