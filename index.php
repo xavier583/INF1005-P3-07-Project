@@ -14,7 +14,7 @@ include 'includes/header.php';
     <div class="hero-overlay">
         <h1 class="Maison Reluxe">Maison Reluxe</h1>
         <p> Curated Luxury, Timeless Style. </p>
-        <a href = "products.php" class="btn btn-primary">Explore Collection</a>
+        <a href = "products.php" class="mainpage-btn">Explore Collection</a>
     </div>
 </section>
 
