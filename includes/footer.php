@@ -16,4 +16,5 @@
         &copy; 2024 Maison Reluxe. All rights reserved.
     </div>
 </footer>
+</body>
 </html>
