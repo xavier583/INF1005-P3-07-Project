@@ -12,7 +12,7 @@ include 'includes/header.php';
     </video>
 
     <div class="hero-overlay">
-        <img src = "images/logo.jpg" alt="Maison Reluxe Logo" class="hero-logo">
+        <img src = "images/brand_logo.png" alt="Maison Reluxe Logo" class="hero-logo">
         <p> Curated Luxury, Timeless Style. </p>
         <a href = "products.php" class="mainpage-btn">Explore Collection</a>     
     </div>
