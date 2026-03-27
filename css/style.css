@@ -365,3 +365,90 @@ input, select {
 .success-btn:hover {
     background: black;
 }
+
+/* INDEX (HOME) PAGE */
+.hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.hero-overlay h1 {
+    font-size: 60px;
+    letter-spacing: 6px;
+    font-weight: 300;
+}
+
+.hero-overlay p {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: 1px solid white;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}
+
+.slideshow {
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+}
+
+.slides img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.products {
+    text-align: center;
+    padding: 80px 40px;
+}
+
+.product-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.product img {
+    width: 250px;
+}
+
+.product h3 {
+    margin-top: 10px;
+}
+
+.slides {
+    display: none;
+}
+
+.slides img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
