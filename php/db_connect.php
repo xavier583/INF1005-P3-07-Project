@@ -5,8 +5,8 @@
 
 // Database configuration
 define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'maison-reluxe-sqldev');
-define('DB_PASSWORD', 'maisonreluxeSQL');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
 define('DB_NAME', 'maison_reluxe');
 
 // Create a new MySQLi object
