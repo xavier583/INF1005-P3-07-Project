@@ -5,9 +5,9 @@
 
 // Database configuration
 define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'your_username');
-define('DB_PASSWORD', 'your_password');
-define('DB_NAME', 'your_database_name');
+define('DB_USERNAME', 'maison-reluxe-sqldev');
+define('DB_PASSWORD', 'maisonreluxeSQL');
+define('DB_NAME', 'maison_reluxe');
 
 // Create a new MySQLi object
 $conn = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
