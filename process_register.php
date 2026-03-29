@@ -1,4 +1,5 @@
  <?php
+ include "php/functions.php";
  error_reporting(E_ALL);
 ini_set('display_errors', 1);
     include "includes/header.php";
@@ -62,16 +63,7 @@ if ($success) {
     echo " <a href = 'register.php' class='btn ms-auto'> Back to Sign-Up </a>";
 }
 echo "</div>";
-/*
-* Helper function that checks input for malicious or unwanted content.
-*/
-function sanitize_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
+
 /*
 * Helper function to write the member data to the database.
 */
