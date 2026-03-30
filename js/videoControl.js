@@ -1,16 +1,20 @@
-const video = document.getElementById("hero-video");
-const controlBtn = document.getElementById("video-control");
+document.addEventListener("DOMContentLoaded", function () {
+    const video = document.getElementById("hero-video");
+    const button = document.getElementById("video-control");
 
-if (video && controlBtn) {
-    controlBtn.addEventListener("click", function () {
+    if (!video || !button) {
+        return;
+    }
+
+    button.addEventListener("click", function () {
         if (video.paused) {
             video.play();
-            controlBtn.textContent = "❚❚";
-            controlBtn.setAttribute("aria-label", "Pause video");
+            button.textContent = "❚❚";
+            button.setAttribute("aria-label", "Pause Video");
         } else {
             video.pause();
-            controlBtn.textContent = "▶";
-            controlBtn.setAttribute("aria-label", "Play video");
+            button.textContent = "▶";
+            button.setAttribute("aria-label", "Play Video");
         }
     });
-}
+});
