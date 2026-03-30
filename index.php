@@ -58,7 +58,9 @@ include 'includes/header.php';
         <div class="row g-4 justify-content-center">
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/bags/birkin 1.jpeg" class="card-img-top" alt="Hermès Bag">
+                    <a href="product_detail.php?id=6">
+                        <img src="images/bags/birkin 1.jpeg" class="card-img-top" alt="Hermès Bag">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Hermès Birkin 30 Cacao</h5>
                     </div>
@@ -66,7 +68,9 @@ include 'includes/header.php';
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/watches/rolex 4.jpeg" class="card-img-top" alt="Rolex Watch">
+                    <a href="product_detail.php?id=4">
+                        <img src="images/watches/rolex 4.jpeg" class="card-img-top" alt="Rolex Watch">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Rolex Yacht-Master</h5>
                     </div>
@@ -74,7 +78,9 @@ include 'includes/header.php';
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/jewellery/cartier_bracelet.jpg" class="card-img-top" alt="Cartier Bracelet">
+                    <a href="product_detail.php?id=17">
+                        <img src="images/jewellery/cartier_bracelet.jpg" class="card-img-top" alt="Cartier Bracelet">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Cartier Love 18k Yellow Gold Bracelet</h5>
                     </div>
