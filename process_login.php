@@ -1,97 +1,59 @@
 <?php
 session_start();
-$rootPath = ".";
-include "includes/header.php";
-include "includes/nav.php";
+require_once 'php/db_connect.php';
 
-$success = true;
-$errorMsg = "";
-$username = "";
-$email = trim($_POST["email"] ?? "");
-$password = $_POST["pwd"] ?? "";
-$user_id = 0;
+include 'includes/header.php';
+include 'includes/nav.php';
 
-echo "<div class='container py-5'>";
-echo "<div class='response text-center'>";
+$success  = false;
+$errorMsg = '';
+$username = isset($_POST['username']) ? trim($_POST['username']) : '';
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    $success = false;
-    $errorMsg = "Invalid request.";
-} elseif (empty($email) || empty($password)) {
-    $success = false;
-    $errorMsg = "Email and password are required.";
+if (empty($username) || empty($_POST['pwd'])) {
+    $errorMsg = 'Please enter both username and password.';
 } else {
-    authenticateUser();
-}
-
-if ($success) {
-    $_SESSION["user_id"] = $user_id;
-    $_SESSION["username"] = $username;
-    $_SESSION["email"] = $email;
-    $_SESSION["logged_in"] = true;
-
-    echo "<h4>Login successful!</h4>";
-    echo "<h5 class='mb-4'>Welcome back, " . htmlspecialchars($username) . "</h5>";
-    echo "<a href='index.php' class='btn btn-dark'>Go to Home</a>";
-} else {
-    echo "<h4>The following input errors were detected:</h4>";
-    echo "<p>" . htmlspecialchars($errorMsg) . "</p>";
-    echo "<a href='login.php' class='btn btn-dark'>Return to login</a>";
-}
-
-echo "</div>";
-echo "</div>";
-
-function authenticateUser()
-{
-    global $conn, $user_id, $username, $email, $password, $errorMsg, $success;
-
-    include "php/db_connect.php";
-
-    if (!isset($conn) || $conn->connect_error) {
-        $errorMsg = "Database connection failed.";
-        $success = false;
-        return;
-    }
-
-    $stmt = $conn->prepare("SELECT member_id, username, email, password FROM maison_reluxe_members WHERE email = ?");
-
-    if (!$stmt) {
-        $errorMsg = "Failed to prepare login query.";
-        $success = false;
-        return;
-    }
-
-    $stmt->bind_param("s", $email);
+    // Query by username 
+    $stmt = $conn->prepare(
+        "SELECT username, password, role FROM maison_reluxe_members WHERE username = ?"
+    );
+    $stmt->bind_param('s', $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-        $user_id = $row["member_id"];
-        $username = $row["username"];
-        $hashed_password = $row["password"];
+    if ($result->num_rows > 0) {
+        $row        = $result->fetch_assoc();
+        $pwd_hashed = $row['password'];
+        $role       = $row['role'];
 
-        if (!password_verify($password, $hashed_password)) {
-            $errorMsg = "Email not found or password doesn't match.";
-            $success = false;
+        if (password_verify($_POST['pwd'], $pwd_hashed)) {
+            // ── Save login info to session ────────────────────────────
+            $_SESSION['logged_in'] = true;
+            $_SESSION['username']  = $row['username'];
+            $_SESSION['role']      = $role; // 'admin' or 'user'
+            // ─────────────────────────────────────────────────────────
+            $success = true;
+        } else {
+            $errorMsg = 'Username or password does not match.';
         }
     } else {
-        $errorMsg = "Email not found or password doesn't match.";
-        $success = false;
+        $errorMsg = 'Username or password does not match.';
     }
-
     $stmt->close();
-    $conn->close();
 }
 ?>
 
-<style>
-    .response {
-        max-width: 680px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-</style>
+<main class="container my-5">
+    <div class="response text-center">
+        <?php if ($success): ?>
+            <h4>Login successful!</h4>
+            <h5>Welcome back, <?= htmlspecialchars($_SESSION['username']) ?>!</h5>
+            <a href="index.php" class="btn btn-dark mt-3">Return to Home</a>
+        <?php else: ?>
+            <h4>The following input errors were detected:</h4>
+            <p class="text-danger"><?= htmlspecialchars($errorMsg) ?></p>
+            <a href="login.php" class="btn btn-outline-dark mt-3">Return to Login</a>
+        <?php endif; ?>
+    </div>
+</main>
 
-<?php include "includes/footer.php"; ?>
+<?php include 'includes/footer.php'; ?>
