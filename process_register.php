@@ -1,23 +1,32 @@
- <?php
- include "php/functions.php";
- error_reporting(E_ALL);
+<?php
+session_start();
+include "php/functions.php";
+error_reporting(E_ALL);
 ini_set('display_errors', 1);
-    include "includes/header.php";
-    ?>
- <?php
-    include "includes/nav.php";
-    ?>
-<?php 
-$fname = $lname = $email = $pwd = $pwd_confirm = $errorMsg = "";
+
+$rootPath = ".";
+include "includes/header.php";
+include "includes/nav.php";
+
+$username = "";
+$email = "";
+$pwd = "";
+$pwd_confirm = "";
+$errorMsg = "";
 $success = true;
 
-if (empty($_POST["username"])){
-    $errorMsg .= "username is required.<br>";
-    $success = false;   
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    $success = false;
+    $errorMsg = "Invalid request.";
+}
+
+if (empty($_POST["username"])) {
+    $errorMsg .= "Username is required.<br>";
+    $success = false;
 } else {
     $username = sanitize_input($_POST["username"]);
-    if (!filter_var($_POST["username"],FILTER_SANITIZE_SPECIAL_CHARS)){
-        $errorMsg .=  "Invalid name format.";
+    if (!preg_match("/^[A-Za-z0-9_]{4,20}$/", $username)) {
+        $errorMsg .= "Username must be 4 to 20 characters and can only contain letters, numbers, and underscores.<br>";
         $success = false;
     }
 }
@@ -27,90 +36,99 @@ if (empty($_POST["email"])) {
     $success = false;
 } else {
     $email = sanitize_input($_POST["email"]);
-    // Additional check to make sure e-mail address is well-formed.
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errorMsg .= "Invalid email format.";
+        $errorMsg .= "Invalid email format.<br>";
         $success = false;
     }
 }
-if (empty($_POST["pwd"])){
+
+if (empty($_POST["pwd"])) {
     $errorMsg .= "Password is required.<br>";
     $success = false;
-}
-else{
+} else {
     $pwd = $_POST["pwd"];
-    $pwd_confirm = $_POST["pwd_confirm"];
-    if ($pwd == $pwd_confirm)
-        $pwd_hashed = password_hash($pwd,PASSWORD_DEFAULT);
-    else{
-        $errorMsg .= "Passwords do not match.";
+    $pwd_confirm = $_POST["pwd_confirm"] ?? "";
+
+    if ($pwd !== $pwd_confirm) {
+        $errorMsg .= "Passwords do not match.<br>";
         $success = false;
+    } else {
+        $pwd_hashed = password_hash($pwd, PASSWORD_DEFAULT);
     }
-        
 }
+
 echo "<div class='response text-center my-5'>";
-if ($success)
-    {
+
+if ($success) {
     saveMemberToDB();
-    }
+}
+
 if ($success) {
     echo "<h4>Registration successful!</h4>";
-    echo "<p>Email: " . $email . "</p>";
-    echo " <a href = 'login.php' class='btn ms-auto'> Log-In </a>";
+    echo "<p>Email: " . htmlspecialchars($email) . "</p>";
+    echo "<a href='login.php' class='btn btn-dark'>Log In</a>";
 } else {
     echo "<h4>The following input errors were detected:</h4>";
     echo "<p>" . $errorMsg . "</p>";
-    echo " <a href = 'register.php' class='btn ms-auto'> Back to Sign-Up </a>";
+    echo "<a href='register.php' class='btn btn-dark'>Back to Sign-Up</a>";
 }
+
 echo "</div>";
 
-/*
-* Helper function to write the member data to the database.
-*/
 function saveMemberToDB()
 {
-global $username, $email, $pwd_hashed, $errorMsg, $success;
-// Create database connection.
-$config = parse_ini_file('/var/www/private/db_config.ini');
-if (!$config)
-{
-$errorMsg = "Failed to read database config file.";
-$success = false;
-}
-else
-{
-$conn = new mysqli(
-$config['servername'],
-$config['username'],
-$config['password'],
-$config['dbname']
-);
-// Check connection
-if ($conn->connect_error)
-{
-$errorMsg = "Connection failed: " . $conn->connect_error;
-$success = false;
-}
-else
-{
-// Prepare the statement:
-$stmt = $conn->prepare("INSERT INTO maison_reluxe_members
-(username, email, password) VALUES (?, ?, ?, ?)");
-// Bind & execute the query statement:
-$stmt->bind_param("ssss", $username, $email, $pwd_hashed);
-if (!$stmt->execute())
-{
-$errorMsg = "Execute failed: (" . $stmt->errno . ") " .
-$stmt->error;
-$success = false;
-}
-$stmt->close();
-}
-$conn->close();
-}
-}
+    global $conn, $username, $email, $pwd_hashed, $errorMsg, $success;
 
+    include "php/db_connect.php";
+
+    if (!isset($conn) || $conn->connect_error) {
+        $errorMsg = "Database connection failed.";
+        $success = false;
+        return;
+    }
+
+    $checkStmt = $conn->prepare("SELECT member_id FROM maison_reluxe_members WHERE email = ?");
+
+    if (!$checkStmt) {
+        $errorMsg = "Failed to prepare email check query.";
+        $success = false;
+        return;
+    }
+
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+
+    if ($checkResult->num_rows > 0) {
+        $errorMsg = "This email is already registered.";
+        $success = false;
+        $checkStmt->close();
+        $conn->close();
+        return;
+    }
+    $checkStmt->close();
+
+    $stmt = $conn->prepare("INSERT INTO maison_reluxe_members (username, email, password) VALUES (?, ?, ?)");
+
+    if (!$stmt) {
+        $errorMsg = "Failed to prepare register query.";
+        $success = false;
+        $conn->close();
+        return;
+    }
+
+    $stmt->bind_param("sss", $username, $email, $pwd_hashed);
+
+    if (!$stmt->execute()) {
+        $errorMsg = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        $success = false;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
 ?>
+
 <style>
     .response {
         max-width: 680px;
@@ -118,6 +136,5 @@ $conn->close();
         margin-right: auto;
     }
 </style>
- <?php
-    include "includes/footer.php";
-    ?>
+
+<?php include "includes/footer.php"; ?>
