@@ -2,21 +2,30 @@
 session_start();
 require 'php/db_connect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+// Admin guard — only logged-in admins can access this page
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: login.php');
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = (int)$_POST['id'];
 
-    $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    
+    // Delete from maison_reluxe_products using product_id (correct table + column)
+    $stmt = $conn->prepare(
+        "DELETE FROM maison_reluxe_products WHERE product_id = ?"
+    );
+    $stmt->bind_param('i', $id);
+
     if ($stmt->execute()) {
-        // Redirect back to products page with a success message
-        header("Location: products.php?msg=deleted");
+        header('Location: products.php?msg=deleted');
     } else {
-        echo "Error deleting product: " . $conn->error;
+        echo 'Error deleting product: ' . htmlspecialchars($conn->error);
     }
-    
+
     $stmt->close();
 } else {
-    echo "Invalid request.";
+    header('Location: products.php');
 }
+exit;
 ?>
