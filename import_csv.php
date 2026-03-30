@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                     }
 
                     $stmt->bind_param(
-                        'isdsss s',
+                        'isdssss',
                         $productId, $name, $price, $image, $category, $brand, $description
                     );
                     $stmt->execute();

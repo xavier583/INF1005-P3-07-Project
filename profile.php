@@ -110,6 +110,8 @@ function renderStars($rating)
                 <span class="info-value"><?php echo htmlspecialchars($email); ?></span>
             </div>
         </div>
+
+        <a href="logout.php" class="btn btn-outline-dark">Log Out</a>
     </div>
 
     <div class="profile-card mb-4">

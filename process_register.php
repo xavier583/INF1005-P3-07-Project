@@ -13,6 +13,7 @@ $email = "";
 $pwd = "";
 $pwd_confirm = "";
 $errorMsg = "";
+$role = "user";
 $success = true;
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -77,7 +78,7 @@ echo "</div>";
 
 function saveMemberToDB()
 {
-    global $conn, $username, $email, $pwd_hashed, $errorMsg, $success;
+    global $conn, $username, $email, $pwd_hashed,$role, $errorMsg, $success;
 
     include "php/db_connect.php";
 
@@ -108,7 +109,7 @@ function saveMemberToDB()
     }
     $checkStmt->close();
 
-    $stmt = $conn->prepare("INSERT INTO maison_reluxe_members (username, email, password) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO maison_reluxe_members (username, email, password,role) VALUES (?, ?, ?,?)");
 
     if (!$stmt) {
         $errorMsg = "Failed to prepare register query.";
@@ -117,7 +118,7 @@ function saveMemberToDB()
         return;
     }
 
-    $stmt->bind_param("sss", $username, $email, $pwd_hashed);
+    $stmt->bind_param("ssss", $username, $email, $pwd_hashed,$role);
 
     if (!$stmt->execute()) {
         $errorMsg = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;

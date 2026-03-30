@@ -6,6 +6,10 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 $currentPage = basename($_SERVER['PHP_SELF']);
 $cartCount = 0;
 $wishlistCount = 0;
+$isLoggedIn = false;
+$isAdmin = false;
+$profileLink = "";
+$wishlistLink = "";
 
 if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $item) {
@@ -16,6 +20,17 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
     $wishlistCount = count($_SESSION['wishlist']);
 }
+
+$isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true && isset($_SESSION['user_id']);
+$isAdmin = $isLoggedIn && isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
+
+if ($isLoggedIn)
+    {
+    $profileLink = "profile.php";
+    $wishlistLink = "products.php?wishlist=1";
+    }
+else
+    $profileLink = $wishlistLink = "login.php";
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -48,8 +63,26 @@ if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
 
             <ul class="navbar-nav ms-auto">
 
+            <?php if ($isAdmin):?>
                 <li class="nav-item">
-                    <a class="nav-link icon-nav-link <?php if($currentPage == 'products.php' && isset($_GET['wishlist']) && $_GET['wishlist'] === '1') echo 'active'; ?>" href="<?php echo $rootPath; ?>/products.php?wishlist=1">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'add_product.php') echo 'active'; ?>" href="<?php echo $rootPath . "/add_product.php";?>">
+                        <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-plus-circle"></i>
+                        </span>
+                    </a>
+                </li>
+
+                 <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'import_csv.php') echo 'active'; ?>" href="<?php echo $rootPath . "/import_csv.php";?>">
+                        <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-database-add"></i>
+                        </span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+                <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'products.php' && isset($_GET['wishlist']) && $_GET['wishlist'] === '1') echo 'active'; ?>" href="<?php echo $rootPath."/".$wishlistLink; ?>">
                         <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
                             <i class="bi bi-heart"></i>
                         <?php if ($wishlistCount > 0): ?>
@@ -75,7 +108,7 @@ if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link icon-nav-link <?php if($currentPage == 'login.php') echo 'active'; ?>" href="<?php echo $rootPath; ?>/login.php">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'profile.php') echo 'active'; ?>" href="<?php echo $rootPath . "/" . $profileLink;?>">
                         <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
                             <i class="bi bi-person"></i>
                         </span>

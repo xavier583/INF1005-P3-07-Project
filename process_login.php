@@ -1,5 +1,7 @@
 <?php
 session_start();
+ error_reporting(E_ALL);
+ini_set('display_errors', 1);
 $rootPath = ".";
 include "includes/header.php";
 include "includes/nav.php";
@@ -10,6 +12,7 @@ $username = "";
 $email = trim($_POST["email"] ?? "");
 $password = $_POST["pwd"] ?? "";
 $user_id = 0;
+$role = "";
 
 echo "<div class='container py-5'>";
 echo "<div class='response text-center'>";
@@ -29,6 +32,7 @@ if ($success) {
     $_SESSION["username"] = $username;
     $_SESSION["email"] = $email;
     $_SESSION["logged_in"] = true;
+    $_SESSION['role'] = $role;
 
     echo "<h4>Login successful!</h4>";
     echo "<h5 class='mb-4'>Welcome back, " . htmlspecialchars($username) . "</h5>";
@@ -44,7 +48,7 @@ echo "</div>";
 
 function authenticateUser()
 {
-    global $conn, $user_id, $username, $email, $password, $errorMsg, $success;
+    global $conn, $user_id, $username, $email, $password,$role, $errorMsg, $success;
 
     include "php/db_connect.php";
 
@@ -54,7 +58,7 @@ function authenticateUser()
         return;
     }
 
-    $stmt = $conn->prepare("SELECT member_id, username, email, password FROM maison_reluxe_members WHERE email = ?");
+    $stmt = $conn->prepare("SELECT member_id, username, email, password, role FROM maison_reluxe_members WHERE email = ?");
 
     if (!$stmt) {
         $errorMsg = "Failed to prepare login query.";
@@ -71,6 +75,7 @@ function authenticateUser()
         $user_id = $row["member_id"];
         $username = $row["username"];
         $hashed_password = $row["password"];
+        $role = $row["role"];
 
         if (!password_verify($password, $hashed_password)) {
             $errorMsg = "Email not found or password doesn't match.";
