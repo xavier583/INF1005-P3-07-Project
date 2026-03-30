@@ -1,18 +1,20 @@
 <?php session_start();
 
+require_once __DIR__ . '/php/functions.php';
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: checkout.php');
     exit();
 }
 
-$country = trim($_POST['country'] ?? '');
-$address = trim($_POST['address'] ?? '');
-$city = trim($_POST['city'] ?? '');
-$postal_code = trim($_POST['postal_code'] ?? '');
-$card_number = trim($_POST['card_number'] ?? '');
-$expiry = trim($_POST['expiry'] ?? '');
-$cvv = trim($_POST['cvv'] ?? '');
-$card_name = trim($_POST['card_name'] ?? '');
+$country = sanitize_input($_POST['country'] ?? '');
+$address = sanitize_input($_POST['address'] ?? '');
+$city = sanitize_input($_POST['city'] ?? '');
+$postal_code = sanitize_input($_POST['postal_code'] ?? '');
+$card_number = sanitize_input($_POST['card_number'] ?? '');
+$expiry = sanitize_input($_POST['expiry'] ?? '');
+$cvv = sanitize_input($_POST['cvv'] ?? '');
+$card_name = sanitize_input($_POST['card_name'] ?? '');
 
 $errors = [];
 

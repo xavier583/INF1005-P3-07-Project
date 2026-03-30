@@ -20,33 +20,33 @@ include 'includes/header.php';
 </section>
 
 <!-- Slideshow -->
-<section class="slideshow">
-    <div class="slide">
+<section class="home-slideshow">
+    <div class="home-slide">
         <img src = "images/jewellery/bvlgari_bracelet.png" alt="Bvlgari Bracelet">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=18" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=18" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/bags/chanel_bag.png" alt="Chanel Bag">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=27" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=27" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/shoes/gucci 1.jpeg" alt="Gucci Shoes">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=11" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=11" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/watches/rolex 1.jpeg" alt="Rolex Watch">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=1" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=1" class="home-slide-action">View This Item</a>
         </div>
     </div>
 </section>
@@ -58,7 +58,9 @@ include 'includes/header.php';
         <div class="row g-4 justify-content-center">
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/bags/birkin 1.jpeg" class="card-img-top" alt="Hermès Bag">
+                    <a href="product_detail.php?id=6">
+                        <img src="images/bags/birkin 1.jpeg" class="card-img-top" alt="Hermès Bag">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Hermès Birkin 30 Cacao</h5>
                     </div>
@@ -66,7 +68,9 @@ include 'includes/header.php';
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/watches/rolex 4.jpeg" class="card-img-top" alt="Rolex Watch">
+                    <a href="product_detail.php?id=4">
+                        <img src="images/watches/rolex 4.jpeg" class="card-img-top" alt="Rolex Watch">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Rolex Yacht-Master</h5>
                     </div>
@@ -74,7 +78,9 @@ include 'includes/header.php';
             </div>
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100">
-                    <img src="images/jewellery/cartier_bracelet.jpg" class="card-img-top" alt="Cartier Bracelet">
+                    <a href="product_detail.php?id=17">
+                        <img src="images/jewellery/cartier_bracelet.jpg" class="card-img-top" alt="Cartier Bracelet">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">Cartier Love 18k Yellow Gold Bracelet</h5>
                     </div>

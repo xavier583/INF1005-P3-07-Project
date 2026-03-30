@@ -11,9 +11,61 @@
             Every piece deserves another story.
         </p>
     </div>
+
+    <section class="footer-links-area">
+        <div class="container">
+            <div class="row g-4 text-start">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <h3 class="footer-link-heading">Contact Hub</h3>
+                    <ul class="footer-link-list">
+                        <li><a href="#">Store locator</a></li>
+                        <li><a href="#">Contact &amp; Appointments</a></li>
+                        <li><a href="#">Book an appointment</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <h3 class="footer-link-heading">Customer Care</h3>
+                    <ul class="footer-link-list">
+                        <li><a href="#">Order information</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Returns and exchanges</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <h3 class="footer-link-heading">About Maison Reluxe</h3>
+                    <ul class="footer-link-list">
+                        <li><a href="#">Brand protection</a></li>
+                        <li><a href="#">Ethics &amp; Compliance</a></li>
+                        <li><a href="#">People &amp; Careers</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <h3 class="footer-link-heading">Privacy &amp; Legal</h3>
+                    <ul class="footer-link-list">
+                        <li><a href="#">Cookies Settings</a></li>
+                        <li><a href="#">Privacy center</a></li>
+                        <li><a href="#">Terms of use</a></li>
+                        <li><a href="#">Terms and conditions</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-socials" aria-label="Social media links">
+                <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            </div>
+        </div>
+    </section>
+
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        &copy; 2024 Maison Reluxe. All rights reserved.
+        &copy; 2026 Maison Reluxe. All rights reserved.
     </div>
 </footer>
 </body>
