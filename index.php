@@ -20,33 +20,33 @@ include 'includes/header.php';
 </section>
 
 <!-- Slideshow -->
-<section class="slideshow">
-    <div class="slide">
+<section class="home-slideshow">
+    <div class="home-slide">
         <img src = "images/jewellery/bvlgari_bracelet.png" alt="Bvlgari Bracelet">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=18" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=18" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/bags/chanel_bag.png" alt="Chanel Bag">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=27" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=27" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/shoes/gucci 1.jpeg" alt="Gucci Shoes">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=11" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=11" class="home-slide-action">View This Item</a>
         </div>
     </div>
-    <div class="slide">
+    <div class="home-slide">
         <img src = "images/watches/rolex 1.jpeg" alt="Rolex Watch">
-        <div class="slide-banner">
-            <p class="slide-copy">Discover Our Many Products</p>
-            <a href="product_detail.php?id=1" class="slide-action">View This Item</a>
+        <div class="home-slide-banner">
+            <p class="home-slide-copy">Discover Our Many Products</p>
+            <a href="product_detail.php?id=1" class="home-slide-action">View This Item</a>
         </div>
     </div>
 </section>

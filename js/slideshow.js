@@ -1,7 +1,7 @@
 let slideIndex = 1;
 
 function showSlides() {
-    const slides = document.getElementsByClassName("slide");
+    const slides = document.getElementsByClassName("home-slide");
     console.log("showSlides called, number of slides:", slides.length);
     
     // Hide all slides
@@ -28,7 +28,7 @@ function showSlides() {
 
 // Function to display first slide immediately
 function initSlideshow() {
-    const slides = document.getElementsByClassName("slide");
+    const slides = document.getElementsByClassName("home-slide");
     console.log("initSlideshow called, number of slides found:", slides.length);
     
     if (slides.length > 0) {
