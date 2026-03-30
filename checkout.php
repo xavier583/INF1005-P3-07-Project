@@ -70,7 +70,7 @@ function oldValue($key, $old) {
                 <div class = "row">
                     <div class="field">
                         <label>Expiry Date</label>
-                        <input type="text" name="expiry" placeholder="MM/YY" required>
+                        <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5" required>
                         <?php if (isset($errors['expiry'])): ?>
                             <div class="field-error"><?php echo $errors['expiry']; ?></div>
                         <?php endif; ?>
@@ -98,4 +98,18 @@ function oldValue($key, $old) {
     </form>
 
 </div>
+
+<script>
+    // Auto-format expiry date with automatic "/" insertion
+    document.getElementById('expiry').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        
+        e.target.value = value;
+    });
+</script>
+
 <?php include 'includes/footer.php'; ?>

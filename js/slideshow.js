@@ -1,48 +1,50 @@
-let slideIndex = 0;
-let slides = [];
-let slideshowInterval = null;
+let slideIndex = 1;
 
-function showSlide(index) {
-    if (slides.length === 0) {
-        return;
-    }
-
+function showSlides() {
+    const slides = document.getElementsByClassName("home-slide");
+    console.log("showSlides called, number of slides:", slides.length);
+    
+    // Hide all slides
     for (let i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
     }
 
-    slides[index].style.display = "block";
-}
-
-function nextSlide() {
-    if (slides.length === 0) {
-        return;
-    }
-
     slideIndex++;
-    if (slideIndex >= slides.length) {
-        slideIndex = 0;
+
+    // Loop back to first slide if we've gone past the last one
+    if (slideIndex > slides.length) {
+        slideIndex = 1;
     }
 
-    showSlide(slideIndex);
+    // Show current slide
+    if (slides.length > 0) {
+        slides[slideIndex - 1].style.display = "block";
+        console.log("Displaying slide:", slideIndex);
+    }
+    setTimeout(showSlides, 3000);
 }
 
-function startSlideshow() {
-    slides = document.querySelectorAll(".slide");
-
-    if (slides.length === 0) {
-        return;
+// Function to display first slide immediately
+function initSlideshow() {
+    const slides = document.getElementsByClassName("home-slide");
+    console.log("initSlideshow called, number of slides found:", slides.length);
+    
+    if (slides.length > 0) {
+        slideIndex = 1;
+        slides[0].style.display = "block";
+        console.log("First slide displayed");
+        // Then start the rotation after 3 seconds
+        setTimeout(showSlides, 3000);
+    } else {
+        console.error("No slides found! Check your HTML structure.");
     }
-
-    slideIndex = 0;
-    showSlide(slideIndex);
-
-    if (slideshowInterval !== null) {
-        clearInterval(slideshowInterval);
-    }
-
-    slideshowInterval = setInterval(nextSlide, 3000);
 }
 
-document.addEventListener("DOMContentLoaded", startSlideshow);
-window.addEventListener("load", startSlideshow);
+// Wait for DOM to be fully loaded before starting slideshow
+if (document.readyState === 'loading') {
+    console.log("DOM still loading, waiting for DOMContentLoaded");
+    document.addEventListener('DOMContentLoaded', initSlideshow);
+} else {
+    console.log("DOM already loaded, initializing slideshow");
+    initSlideshow();
+}
