@@ -13,7 +13,7 @@ if (isset($conn) && !$conn->connect_error) {
 
     if ($reviewCheck && $reviewCheck->num_rows > 0) {
         $stmt = $conn->prepare("
-            SELECT r.rating, r.review_text, r.created_at, m.username, p.name AS product_name
+            SELECT r.rating,r.product_id, r.review_text, r.created_at, m.username, p.name AS product_name
             FROM maison_reluxe_reviews r
             INNER JOIN maison_reluxe_members m ON r.member_id = m.member_id
             INNER JOIN maison_reluxe_products p ON r.product_id = p.product_id
@@ -63,7 +63,8 @@ function renderStars($rating)
 
                             <div class="review-header">
                                 <div>
-                                    <h5 class="review-product"><?php echo htmlspecialchars($review['product_name']); ?></h5>
+                                    <a href="<?php echo $rootPath; ?>/product_detail.php?id=<?php echo $review['product_id']; ?>">
+                                    <h5 class="review-product"><?php echo htmlspecialchars($review['product_name']); ?></h5> </a>
                                     <div class="review-stars"><?php echo renderStars($review['rating']); ?></div>
                                 </div>
                                 <span class="review-user"><?php echo htmlspecialchars($review['username']); ?></span>
@@ -138,6 +139,11 @@ function renderStars($rating)
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
+    .review-card a {
+        text-decoration: none;
+            outline: none;         
+    }
+
     .review-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
@@ -172,7 +178,7 @@ function renderStars($rating)
 
     .review-stars {
         letter-spacing: 2px;
-        color: #111;
+        color: #f5c518;
         font-size: 1rem;
     }
 

@@ -107,7 +107,7 @@ try {
                 return false;
     }
 
-    $order_number = bin2hex(random_bytes(4));
+    $order_number = strtoupper(bin2hex(random_bytes(4)));
     $status = "Pending";
     $cart  = $_SESSION['cart'] ?? [];
     $total_amount = 0;

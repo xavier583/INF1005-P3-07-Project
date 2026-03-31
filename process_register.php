@@ -8,6 +8,7 @@ $rootPath = ".";
 include "includes/header.php";
 include "includes/nav.php";
 
+$user_id = 0;
 $username = "";
 $email = "";
 $pwd = "";
@@ -65,9 +66,14 @@ if ($success) {
 }
 
 if ($success) {
-    echo "<h4>Registration successful!</h4>";
-    echo "<p>Email: " . htmlspecialchars($email) . "</p>";
-    echo "<a href='login.php' class='btn btn-dark'>Log In</a>";
+    $_SESSION["user_id"] = $user_id;
+    $_SESSION["username"] = $username;
+    $_SESSION["email"] = $email;
+    $_SESSION["logged_in"] = true;
+    $_SESSION['role'] = $role;
+
+    header("Location: products.php");
+    exit();
 } else {
     echo "<h4>The following input errors were detected:</h4>";
     echo "<p>" . $errorMsg . "</p>";
@@ -124,6 +130,8 @@ function saveMemberToDB()
         $errorMsg = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
         $success = false;
     }
+
+    $user_id = $conn->insert_id;
 
     $stmt->close();
     $conn->close();

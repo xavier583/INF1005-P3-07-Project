@@ -27,14 +27,16 @@ if (isset($conn) && !$conn->connect_error) {
         $orderStmt = $conn->prepare("
             SELECT 
                 o.order_id,
+                o.order_number,
                 o.order_date,
                 o.total_amount,
                 o.status,
                 o.country,
-                o.address,
+                o.shipping_address,
                 o.city,
                 o.postal_code,
                 p.name AS product_name,
+                oi.product_id,
                 oi.quantity,
                 oi.price
             FROM maison_reluxe_orders o
@@ -48,15 +50,36 @@ if (isset($conn) && !$conn->connect_error) {
         $orderResult = $orderStmt->get_result();
 
         while ($row = $orderResult->fetch_assoc()) {
-            $orders[] = $row;
-        }
+    $order_id = $row['order_id'];
+
+    if (!isset($orders[$order_id])) {
+        $orders[$order_id] = [
+            'order_number' => $row['order_number'],
+            'order_date' => $row['order_date'],
+            'total_amount' => $row['total_amount'],
+            'status' => $row['status'],
+            'shipping_address' => $row['shipping_address'],
+            'city' => $row['city'],
+            'country' => $row['country'],
+            'postal_code' => $row['postal_code'],
+            'items' => []
+        ];
+    }
+
+    $orders[$order_id]['items'][] = [
+        'product_id' => $row['product_id'],
+        'product_name' => $row['product_name'],
+        'quantity' => $row['quantity'],
+        'price' => $row['price']
+    ];
+}
         $orderStmt->close();
     }
 
     $reviewCheck = $conn->query("SHOW TABLES LIKE 'maison_reluxe_reviews'");
     if ($reviewCheck && $reviewCheck->num_rows > 0) {
         $reviewStmt = $conn->prepare("
-            SELECT r.review_id, r.rating, r.review_text, r.created_at, p.name AS product_name
+            SELECT r.review_id, r.product_id, r.rating, r.review_text, r.created_at, p.name AS product_name
             FROM maison_reluxe_reviews r
             INNER JOIN maison_reluxe_products p ON r.product_id = p.product_id
             WHERE r.member_id = ?
@@ -121,35 +144,46 @@ function renderStars($rating)
         </div>
 
         <?php if (count($orders) > 0): ?>
-            <div class="orders-list">
-                <?php foreach ($orders as $order): ?>
-                    <div class="order-item">
-                        <div class="order-top">
-                            <div>
-                                <h5 class="mb-1">Order #<?php echo htmlspecialchars($order['order_id']); ?></h5>
-                                <div class="order-product"><?php echo htmlspecialchars($order['product_name']); ?></div>
-                            </div>
-                            <span class="status-badge"><?php echo htmlspecialchars(ucfirst($order['status'])); ?></span>
-                        </div>
-
-                        <div class="order-details">
-                            <p><strong>Date:</strong> <?php echo htmlspecialchars($order['order_date']); ?></p>
-                            <p><strong>Quantity:</strong> <?php echo htmlspecialchars($order['quantity']); ?></p>
-                            <p><strong>Item Price:</strong> $<?php echo number_format((float)$order['price'], 2); ?></p>
-                            <p><strong>Total Amount:</strong> $<?php echo number_format((float)$order['total_amount'], 2); ?></p>
-                            <p>
-                                <strong>Shipping Address:</strong>
-                                <?php
-                                echo htmlspecialchars($order['address']) . ", ";
-                                echo htmlspecialchars($order['city']) . ", ";
-                                echo htmlspecialchars($order['country']) . " ";
-                                echo htmlspecialchars($order['postal_code']);
-                                ?>
-                            </p>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+          <div class="orders-list">
+<?php foreach ($orders as $order): ?>
+    <div class="order-item">
+        <div class="order-top">
+            <div>
+                <h5 class="mb-1">Order #<?php echo strtoupper(htmlspecialchars($order['order_number'])); ?></h5>
             </div>
+            <span class="status-badge"><?php echo htmlspecialchars(ucfirst($order['status'])); ?></span>
+        </div>
+
+        <div class="order-details">
+            <p><strong>Date:</strong> <?php echo htmlspecialchars($order['order_date']); ?></p>
+            <p>
+                <strong>Shipping Address:</strong>
+                <?php
+                echo htmlspecialchars($order['shipping_address']) . ", ";
+                echo htmlspecialchars($order['city']) . ", ";
+                echo htmlspecialchars($order['country']) . " ";
+                echo htmlspecialchars($order['postal_code']);
+                ?>
+            </p>
+            <p><strong>Items:</strong></p>
+            <ul>
+                <?php foreach ($order['items'] as $item): ?>
+                    <li>
+                        <a href="<?php echo $rootPath; ?>/product_detail.php?id=<?php echo $item['product_id']; ?>">
+                        <?php echo htmlspecialchars($item['product_name']); ?> 
+                        </a>
+                        (x<?php echo $item['quantity']; ?>) - 
+                        $<?php echo number_format((float)$item['price'], 2); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <p><strong>Total Amount:</strong> $<?php echo number_format((float)$order['total_amount'] * 1.09, 2); ?></p>
+
+        </div>
+    </div>
+<?php endforeach; ?>
+</div>
         <?php else: ?>
             <div class="empty-state">
                 <h4>No orders found yet</h4>
@@ -170,7 +204,8 @@ function renderStars($rating)
                     <div class="review-item">
                         <div class="review-top">
                             <div>
-                                <h5 class="review-product mb-1"><?php echo htmlspecialchars($review['product_name']); ?></h5>
+                                <a href="<?php echo $rootPath; ?>/product_detail.php?id=<?php echo $review['product_id']; ?>">
+                                <h5 class="review-product mb-1"><?php echo htmlspecialchars($review['product_name']); ?></h5></a>
                                 <div class="review-stars"><?php echo renderStars($review['rating']); ?></div>
                             </div>
                             <small class="review-date"><?php echo htmlspecialchars($review['created_at']); ?></small>
@@ -326,9 +361,10 @@ function renderStars($rating)
     }
 
     .review-stars {
-        color: #111;
+        color: #f5c518;
         letter-spacing: 2px;
         font-size: 1.05rem;
+        text-align: left;
     }
 
     .review-date {
@@ -339,6 +375,7 @@ function renderStars($rating)
     .review-text {
         color: #444;
         line-height: 1.6;
+        text-align: left;
     }
 
     @media (max-width: 768px) {
@@ -358,6 +395,14 @@ function renderStars($rating)
         .review-date {
             white-space: normal;
         }
+    }
+    
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    a:hover {
+        text-decoration: underline;
     }
 </style>
 

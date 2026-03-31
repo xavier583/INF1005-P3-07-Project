@@ -34,9 +34,8 @@ if ($success) {
     $_SESSION["logged_in"] = true;
     $_SESSION['role'] = $role;
 
-    echo "<h4>Login successful!</h4>";
-    echo "<h5 class='mb-4'>Welcome back, " . htmlspecialchars($username) . "</h5>";
-    echo "<a href='index.php' class='btn btn-dark'>Go to Home</a>";
+    header("Location: products.php");
+    exit();
 } else {
     echo "<h4>The following input errors were detected:</h4>";
     echo "<p>" . htmlspecialchars($errorMsg) . "</p>";

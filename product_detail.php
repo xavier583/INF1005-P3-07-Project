@@ -30,6 +30,26 @@ $result = $stmt->get_result();
 $product = $result->fetch_assoc();
 $stmt->close();
 
+$avgRating = 0;
+$totalReviews = 0;
+
+$stmt = $conn->prepare(
+    "SELECT AVG(rating) AS avg_rating, COUNT(*) AS total_reviews
+    FROM maison_reluxe_reviews
+    WHERE product_id = ?"
+    );
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+if ($data) {
+    $avgRating = round($data['avg_rating'], 1);
+    $totalReviews = (int)$data['total_reviews'];
+}
+
+$stmt->close();
+
 if (!$product) {
     header('Location: products.php');
     exit;
@@ -148,8 +168,58 @@ $related = [];
 while ($row = $relatedResult->fetch_assoc()) {
     $related[] = $row;
 }
+$reviewStmt = $conn->prepare("
+    SELECT r.rating, r.review_text, r.created_at, m.username
+    FROM maison_reluxe_reviews r
+    INNER JOIN maison_reluxe_members m ON r.member_id = m.member_id
+    WHERE r.product_id = ?
+    ORDER BY r.created_at DESC
+");
+$reviewStmt->bind_param("i", $id);
+$reviewStmt->execute();
+$reviewResult = $reviewStmt->get_result();
+
+$productReviews = [];
+while ($row = $reviewResult->fetch_assoc()) {
+    $productReviews[] = $row;
+}
+$reviewStmt->close();
 $stmt->close();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
+
+    $member_id = (int) $_SESSION['user_id'];
+    $rating = (int) $_POST['rating'];
+    $review_text = trim($_POST['review_text']);
+
+    if ($rating >= 1 && $rating <= 5) {
+        $stmt = $conn->prepare("
+            INSERT INTO maison_reluxe_reviews (member_id, product_id, rating, review_text, created_at)
+            VALUES (?, ?, ?, ?, NOW())
+        ");
+        $stmt->bind_param("iiis", $member_id, $id, $rating, $review_text);
+        $stmt->execute();
+        $stmt->close();
+
+        header("Location: product_detail.php?id=" . $id);
+        exit();
+    }
+}
+
+function renderStars($rating)
+{
+    $stars = '';
+    for ($i = 1; $i <= 5; $i++) {
+        $stars .= $i <= (int)$rating ? '★' : '☆';
+    }
+    return $stars;
+}
 ?>
+
 
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/nav.php'; ?>
@@ -257,6 +327,79 @@ $stmt->close();
         </div>
     </div>
 
+    <div class="mt-5 pt-4 border-top">
+    <h4 class="mb-4 text-start">Customer Reviews</h4>
+    <div class="mb-3">
+    <?php if ($totalReviews > 0): ?>
+        <div class="average-rating">
+            <?php
+            for ($i = 1; $i <= 5; $i++) {
+                echo $i <= round($avgRating) ? '★' : '☆';
+            }
+            ?>
+            <span class="ms-2 text-muted">
+                <?= $avgRating ?> / 5 (<?= $totalReviews ?> review<?= $totalReviews > 1 ? 's' : '' ?>)
+            </span>
+        </div>
+    <?php else: ?>
+        <span class="text-muted">No reviews yet</span>
+    <?php endif; ?>
+</div>
+
+    <?php if (!empty($productReviews)): ?>
+        <div class="reviews-list">
+            <?php foreach ($productReviews as $review): ?>
+                <div class="review-item">
+                    <div class="review-top">
+                        <div>
+                            <strong><?php echo htmlspecialchars($review['username']); ?></strong>
+                            <div class="review-stars">
+                                <?php echo renderStars($review['rating']); ?>
+                            </div>
+                        </div>
+                        <small class="review-date">
+                            <?php echo htmlspecialchars($review['created_at']); ?>
+                        </small>
+                    </div>
+                    <p class="review-text mb-0">
+                        <?php echo htmlspecialchars($review['review_text']); ?>
+                    </p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <div class="empty-state">
+            <p>Be the first to review this product.</p>
+        </div>
+    <?php endif; ?>
+
+    <button class="btn btn-dark mt-3" onclick="toggleReviewForm()">Leave a Review</button>
+
+    <div id="reviewForm" style="display:none;" class="mt-3">
+        <form method="POST">
+            <div class="mb-2">
+                <div class="mb-3">
+                    <label class="form-label">Rating:</label>
+                    <div class="star-rating">
+                    <?php for ($i = 5; $i >= 1; $i--): ?>
+                        <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" required>
+                        <label for="star<?= $i ?>">★</label>
+                        <?php endfor; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <textarea name="review_text" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
+            </div>
+
+            <button type="submit" name="submit_review" class="btn btn-success">
+                Submit Review
+            </button>
+        </form>
+    </div>
+</div>
+
     <?php if (!empty($related)): ?>
         <div class="mt-5 pt-4 border-top">
             <h4 class="mb-4 related-title text-start">You May Also Like</h4>
@@ -286,5 +429,51 @@ $stmt->close();
     <?php endif; ?>
 
 </main>
+
+<script>
+function toggleReviewForm() {
+    const form = document.getElementById("reviewForm");
+    form.style.display = form.style.display === "none" ? "block" : "none";
+}
+</script>
+
+<style>
+    .review-stars{
+        color: #f5c518;
+    }
+
+    .star-rating {
+    direction: rtl;
+    display: inline-flex;
+    gap: 5px;
+    font-size: 1.6rem;
+    
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.star-rating input:checked ~ label {
+    color: #f5c518;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f5c518;
+}
+.average-rating {
+    font-size: 1.2rem;
+    color: #f5c518;
+    letter-spacing: 2px;
+}
+</style>
+
 
 <?php include 'includes/footer.php'; ?>
