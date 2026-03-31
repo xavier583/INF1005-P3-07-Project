@@ -44,11 +44,11 @@
                 <div class="col-12 col-md-6 col-lg-3">
                     <h3 class="footer-link-heading">Privacy &amp; Legal</h3>
                     <ul class="footer-link-list">
-                        <li><a href="#">Cookies Settings</a></li>
-                        <li><a href="#">Privacy center</a></li>
-                        <li><a href="#">Terms of use</a></li>
-                        <li><a href="#">Terms and conditions</a></li>
-                        <li><a href="#">Sitemap</a></li>
+                        <li><a href="#" class="js-popup-link" data-popup-id="cookies-settings">Cookies Settings</a></li>
+                        <li><a href="#" class="js-popup-link" data-popup-id="privacy-center">Privacy center</a></li>
+                        <li><a href="#" class="js-popup-link" data-popup-id="terms-of-use">Terms of use</a></li>
+                        <li><a href="#" class="js-popup-link" data-popup-id="terms-and-conditions">Terms and conditions</a></li>
+                        <li><a href="#" class="js-popup-link" data-popup-id="sitemap">Sitemap</a></li>
                     </ul>
                 </div>
             </div>
@@ -62,6 +62,21 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="footerInfoModal" tabindex="-1" aria-labelledby="footerInfoModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="footerInfoModalTitle">Information</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="footerInfoModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
