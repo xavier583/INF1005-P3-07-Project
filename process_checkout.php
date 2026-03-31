@@ -13,11 +13,13 @@ $address = sanitize_input($_POST['address'] ?? '');
 $city = sanitize_input($_POST['city'] ?? '');
 $postal_code = sanitize_input($_POST['postal_code'] ?? '');
 $card_number = sanitize_input($_POST['card_number'] ?? '');
-$expiry = sanitize_input($_POST['expiry'] ?? '');
+$expiry = trim($_POST['expiry'] ?? '');
 $cvv = sanitize_input($_POST['cvv'] ?? '');
 $card_name = sanitize_input($_POST['card_name'] ?? '');
 
 $errors = [];
+$errorMsg = '';
+$success = true;
 
 $_SESSION['old'] = [
     'country' => $country,
@@ -70,17 +72,26 @@ if ($card_name === '') {
 }
 function saveOrderToDB()
 {
-     global $conn, $member_id, $country, $address, $city, $postal_code, $total_amount, $cart, $errorMsg, $success;
+     global $conn, $country, $address, $city, $postal_code, $total_amount, $cart, $errorMsg, $success;
 
      mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     include "php/db_connect.php";
 
+    $member_id = (int)($_SESSION['user_id'] ?? 0);
+    if ($member_id <= 0) {
+        $errorMsg = "You must be logged in to place an order.";
+        $success = false;
+        return false;
+    }
+
     if (!isset($conn) || $conn->connect_error) {
         $errorMsg = "Database connection failed.";
         $success = false;
-        $conn->close();
-        return;
+        if (isset($conn)) {
+            $conn->close();
+        }
+        return false;
     }
     $conn->begin_transaction();
 
@@ -93,7 +104,7 @@ try {
         $errorMsg = "Failed to prepare order insert query.";
         $success = false;
         $conn->close();
-                return;
+                return false;
     }
 
     $order_number = bin2hex(random_bytes(4));
@@ -118,39 +129,90 @@ try {
         $errorMsg = "Failed to insert order: (" . $stmt->errno . ") " . $stmt->error;
         $success = false;
         $conn->close();
-                return;
+        return false;
     }
 
     $order_id = $stmt->insert_id;
     $stmt->close();
 
-     if (!empty($cart)) {
-        $itemStmt = $conn->prepare("
-            INSERT INTO maison_reluxe_order_items 
-            (order_id, product_id, quantity, price) 
-            VALUES (?, ?, ?, ?)
+      if (!empty($cart)) {
+          $requiresExplicitItemId = false;
+        $nextItemId = 0;
+
+        $schemaStmt = $conn->prepare("
+            SELECT EXTRA
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME = 'maison_reluxe_order_items'
+              AND COLUMN_NAME = 'item_id'
+            LIMIT 1
         ");
+
+        if ($schemaStmt) {
+            $schemaStmt->execute();
+            $schemaResult = $schemaStmt->get_result();
+            $schemaRow = $schemaResult ? $schemaResult->fetch_assoc() : null;
+            $schemaStmt->close();
+
+            if ($schemaRow && stripos((string)$schemaRow['EXTRA'], 'auto_increment') === false) {
+                $requiresExplicitItemId = true;
+                $nextIdResult = $conn->query("SELECT COALESCE(MAX(item_id), 0) + 1 AS next_item_id FROM maison_reluxe_order_items");
+                if ($nextIdResult) {
+                    $nextItemId = (int)($nextIdResult->fetch_assoc()['next_item_id'] ?? 1);
+                    $nextIdResult->free();
+                } else {
+                    $nextItemId = 1;
+                }
+            }
+        }
+
+        if ($requiresExplicitItemId) {
+            $itemStmt = $conn->prepare("
+                INSERT INTO maison_reluxe_order_items 
+                (item_id, order_id, product_id, quantity, price) 
+                VALUES (?, ?, ?, ?, ?)
+            ");
+        } else {
+            $itemStmt = $conn->prepare("
+                INSERT INTO maison_reluxe_order_items 
+                (order_id, product_id, quantity, price) 
+                VALUES (?, ?, ?, ?)
+            ");
+        }
 
          if (!$itemStmt) {
             $errorMsg = "Failed to prepare order items insert query.";
             $success = false;
             $conn->close();
-                return;
+                return false;
         }
 
-         foreach ($cart as $item) {
-            $product_id = $item['product_id'];
-            $quantity = $item['quantity'];
-            $price = $item['price'];
+            foreach ($cart as $item) {
+                $product_id = (int)($item['product_id'] ?? $item['id'] ?? 0);
+                $quantity = (int)($item['quantity'] ?? 0);
+                $price = (float)($item['price'] ?? 0);
 
-            $itemStmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
+                if ($product_id <= 0 || $quantity <= 0) {
+                     $errorMsg = "One or more cart items are invalid. Please update your cart and try again.";
+                     $success = false;
+                     $itemStmt->close();
+                     $conn->close();
+                     return false;
+                }
+
+            if ($requiresExplicitItemId) {
+                $item_id = $nextItemId++;
+                $itemStmt->bind_param("iiiid", $item_id, $order_id, $product_id, $quantity, $price);
+            } else {
+                $itemStmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
+            }
 
             if (!$itemStmt->execute()) {
                 $errorMsg = "Failed to insert order item: (" . $itemStmt->errno . ") " . $itemStmt->error;
                 $success = false;
                 $itemStmt->close();
                 $conn->close();
-                return;
+                return false;
             }
         }
 
@@ -162,23 +224,28 @@ try {
     $conn->rollback();
     $errorMsg = $e->getMessage();
     $success = false;
-}
-   
-
-    echo "<p>You did it!</p>";
     $conn->close();
+    return false;
+}
+
+    $conn->close();
+    return true;
 }
 if (empty($errors))
     {
-        saveOrderToDB();
-        $_SESSION['cart'] = [];
-        unset($_SESSION['old']);
-        header('Location: checkout_success.php');
+        if (saveOrderToDB()) {
+            $_SESSION['cart'] = [];
+            unset($_SESSION['old']);
+            header('Location: checkout_success.php');
+            exit();
+        }
+
+        $_SESSION['errors'] = ['general' => ($errorMsg !== '' ? $errorMsg : 'Unable to process checkout. Please try again.')];
+        header('Location: checkout.php');
         exit();
     }
 else {
     $_SESSION['errors'] = $errors;
-    echo "<p>" . htmlspecialchars($errorMsg) . "</p>";
-    //header('Location: checkout.php');
-    //exit();
+    header('Location: checkout.php');
+    exit();
 }

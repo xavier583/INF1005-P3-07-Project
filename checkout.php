@@ -16,6 +16,9 @@ function oldValue($key, $old) {
 
 <div class="checkout-container">
         <form action ="process_checkout.php" method="POST">
+        <?php if (isset($errors['general'])): ?>
+            <div class="field-error"><?php echo htmlspecialchars($errors['general']); ?></div>
+        <?php endif; ?>
         <!-- Billing Details -->
         <div class="checkout-section">
             <h2 class="section-title">Billing Details</h2>
@@ -100,7 +103,7 @@ function oldValue($key, $old) {
 </div>
 
 <script>
-    // Auto-format expiry date with automatic "/" insertion
+    // Automatically put / in expiry date
     document.getElementById('expiry').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
         
