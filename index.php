@@ -4,6 +4,8 @@ include 'includes/header.php';
 ?>
 <?php include 'includes/nav.php'; ?>
 
+<main id="main-content">
+
 <!-- Hero Video -->
 <section class = "hero">
     <video autoplay muted loop id="hero-video">
@@ -89,6 +91,8 @@ include 'includes/header.php';
         </div>
     </div>
 </section>
+
+</main>
 
 
 <script src="<?php echo $rootPath; ?>/js/slideshow.js"></script>

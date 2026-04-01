@@ -92,54 +92,54 @@ if ($isLoggedIn) {
 
             <ul class="navbar-nav ms-auto">
 
-                <?php if ($isAdmin): ?>
-                    <li class="nav-item">
-                        <a class="nav-link icon-nav-link <?php if ($currentPage == 'add_product.php') echo 'active'; ?>" href="<?php echo $rootPath . "/add_product.php"; ?>">
-                            <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
-                                <i class="bi bi-plus-circle"></i>
-                            </span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link icon-nav-link <?php if ($currentPage == 'import_csv.php') echo 'active'; ?>" href="<?php echo $rootPath . "/import_csv.php"; ?>">
-                            <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
-                                <i class="bi bi-database-add"></i>
-                            </span>
-                        </a>
-                    </li>
-                <?php endif; ?>
-
+            <?php if ($isAdmin):?>
                 <li class="nav-item">
-                    <a class="nav-link icon-nav-link <?php if ($currentPage == 'products.php' && isset($_GET['wishlist']) && $_GET['wishlist'] === '1') echo 'active'; ?>" href="<?php echo $rootPath . "/" . $wishlistLink; ?>">
-                        <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
-                            <i class="bi bi-heart"></i>
-                            <?php if ($wishlistCount > 0): ?>
-                                <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
-                                    <?= $wishlistCount > 99 ? '99+' : $wishlistCount ?>
-                                </span>
-                            <?php endif; ?>
-                        </span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link icon-nav-link <?php if ($currentPage == 'cart.php') echo 'active'; ?>" href="<?php echo $rootPath; ?>/cart.php">
-                        <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
-                            <i class="bi bi-cart"></i>
-                            <?php if ($cartCount > 0): ?>
-                                <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
-                                    <?= $cartCount > 99 ? '99+' : $cartCount ?>
-                                </span>
-                            <?php endif; ?>
-                        </span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link icon-nav-link <?php if ($currentPage == 'profile.php') echo 'active'; ?>" href="<?php echo $rootPath . "/" . $profileLink; ?>">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'add_product.php') echo 'active'; ?>" href="<?php echo $rootPath . "/add_product.php";?>" aria-label="Add Product">
                         <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </li>
+
+                 <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'import_csv.php') echo 'active'; ?>" href="<?php echo $rootPath . "/import_csv.php";?>" aria-label="Import CSV">
+                        <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-database-add" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+                <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'products.php' && isset($_GET['wishlist']) && $_GET['wishlist'] === '1') echo 'active'; ?>" href="<?php echo $rootPath."/".$wishlistLink; ?>" aria-label="Wishlist">
+                        <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        <?php if ($wishlistCount > 0): ?>
+                        <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
+                            <?= $wishlistCount > 99 ? '99+' : $wishlistCount ?>
+                        </span>
+                        <?php endif; ?>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'cart.php') echo 'active'; ?>" href="<?php echo $rootPath; ?>/cart.php" aria-label="Cart">
+                        <span class="nav-icon-wrap cart-icon-wrap position-relative d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart" aria-hidden="true"></i>
+                        <?php if ($cartCount > 0): ?>
+                        <span class="icon-count-badge position-absolute badge rounded-pill bg-dark">
+                            <?= $cartCount > 99 ? '99+' : $cartCount ?>
+                        </span>
+                        <?php endif; ?>
+                        </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link icon-nav-link <?php if($currentPage == 'profile.php') echo 'active'; ?>" href="<?php echo $rootPath . "/" . $profileLink;?>" aria-label="Profile">
+                        <span class="nav-icon-wrap d-inline-flex align-items-center justify-content-center">
+                            <i class="bi bi-person" aria-hidden="true"></i>
                         </span>
                     </a>
                 </li>
