@@ -17,8 +17,6 @@ $email = $_SESSION['email'] ?? '';
 $orders = [];
 $reviews = [];
 
-include "php/db_connect.php";
-
 if (isset($conn) && !$conn->connect_error) {
     $orderCheck = $conn->query("SHOW TABLES LIKE 'maison_reluxe_orders'");
     $itemCheck = $conn->query("SHOW TABLES LIKE 'maison_reluxe_order_items'");
@@ -82,7 +80,7 @@ if (isset($conn) && !$conn->connect_error) {
             SELECT r.review_id, r.product_id, r.rating, r.review_text, r.created_at, p.name AS product_name
             FROM maison_reluxe_reviews r
             INNER JOIN maison_reluxe_products p ON r.product_id = p.product_id
-            WHERE r.member_id = ?
+            WHERE r.member_id = ? AND p.deleted = 0
             ORDER BY r.created_at DESC
         ");
         $reviewStmt->bind_param("i", $user_id);

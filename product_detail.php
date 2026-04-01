@@ -7,10 +7,6 @@
 session_start();
 require_once 'php/db_connect.php';
 
-if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
-    $_SESSION['wishlist'] = [];
-}
-
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if ($id <= 0) {
@@ -19,7 +15,7 @@ if ($id <= 0) {
 }
 
 $stmt = $conn->prepare(
-    "SELECT product_id AS id, name, price, image, category, brand, description
+    "SELECT product_id AS id, name, price, image, category, brand, description,deleted
      FROM maison_reluxe_products
      WHERE product_id = ?
      LIMIT 1"
@@ -37,7 +33,7 @@ $stmt = $conn->prepare(
     "SELECT AVG(rating) AS avg_rating, COUNT(*) AS total_reviews
     FROM maison_reluxe_reviews
     WHERE product_id = ?"
-    );
+);
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -57,17 +53,27 @@ if (!$product) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
     $pid = isset($_POST['product_id']) ? (int) $_POST['product_id'] : 0;
-    $key = array_search($pid, $_SESSION['wishlist'], true);
+    $member_id = $_SESSION['user_id'] ?? null;
 
-    if ($key === false) {
-        $_SESSION['wishlist'][] = $pid;
+    // Check if already in wishlist
+    $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
+    $stmt->bind_param("ii", $member_id, $pid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // REMOVE
+        $stmt = $conn->prepare("DELETE FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
+        $stmt->bind_param("ii", $member_id, $pid);
+        $stmt->execute();
     } else {
-        unset($_SESSION['wishlist'][$key]);
-        $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+        // ADD
+        $stmt = $conn->prepare("INSERT INTO maison_reluxe_wishlist (member_id, product_id) VALUES (?, ?)");
+        $stmt->bind_param("ii", $member_id, $pid);
+        $stmt->execute();
     }
 
-    header('Location: product_detail.php?id=' . $id);
-    exit;
+    $stmt->close();
 }
 
 $cartMessage = '';
@@ -77,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
     }
 
     $pid = (int) $_POST['product_id'];
+    $member_id = $_SESSION['user_id'] ?? null;
 
     if (isset($_SESSION['cart'][$pid])) {
         $_SESSION['cart'][$pid]['quantity']++;
@@ -89,6 +96,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
             'brand'    => $product['brand'],
             'quantity' => 1,
         ];
+    }
+
+    if ($member_id) {
+        $stmt = $conn->prepare("
+            INSERT INTO maison_reluxe_cart (member_id, product_id, quantity)
+            VALUES (?, ?, 1)
+            ON DUPLICATE KEY UPDATE quantity = quantity + 1
+        ");
+        $stmt->bind_param("ii", $member_id, $pid);
+        $stmt->execute();
+        $stmt->close();
     }
 
     $cartMessage = 'success';
@@ -151,7 +169,21 @@ function buildProductGalleryImages(string $imagePath): array
 }
 
 $galleryImages = buildProductGalleryImages($product['image']);
-$isWishlisted = in_array((int) $product['id'], array_map('intval', $_SESSION['wishlist']), true);
+$isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true && isset($_SESSION['user_id']);
+if ($isLoggedIn)
+    $member_id = $_SESSION['user_id'];
+else
+    $member_id = 0;
+$isWishlisted = false;
+
+if ($isLoggedIn) {
+    $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
+    $stmt->bind_param("ii", $member_id, $product['id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $isWishlisted = $result->num_rows > 0;
+    $stmt->close();
+}
 
 $stmt = $conn->prepare(
     "SELECT product_id AS id, name, price, image, brand
@@ -257,8 +289,7 @@ function renderStars($rating)
                                 <img
                                     src="<?= htmlspecialchars($img) ?>"
                                     alt="<?= htmlspecialchars($product['name']) ?> image <?= $index + 1 ?>"
-                                    class="detail-img"
-                                >
+                                    class="detail-img">
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -283,8 +314,7 @@ function renderStars($rating)
                                 data-bs-slide-to="<?= $index ?>"
                                 class="<?= $index === 0 ? 'active' : '' ?>"
                                 aria-current="<?= $index === 0 ? 'true' : 'false' ?>"
-                                aria-label="Slide <?= $index + 1 ?>"
-                            ></button>
+                                aria-label="Slide <?= $index + 1 ?>"></button>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -301,24 +331,53 @@ function renderStars($rating)
                 <p class="detail-description"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
                 <hr>
 
-                <form method="POST" action="">
-                    <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
-                    <button type="submit" name="add_to_cart" class="btn btn-dark btn-lg w-100 add-cart-btn">
-                        Add to Cart
-                    </button>
-                </form>
+                <?php if ($product['deleted'] == 0): ?>
+                    <form method="POST" action="" class="flex-fill">
+                        <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
+                        <button type="submit" name="add_to_cart" class="btn btn-dark w-100">
+                            Add to Cart
+                        </button>
+                    </form>
 
-                <form method="POST" action="" class="mt-2">
-                    <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
-                    <button
-                        type="submit"
-                        name="toggle_wishlist"
-                        class="btn btn-outline-dark w-100 wishlist-detail-btn <?= $isWishlisted ? 'active' : '' ?>"
-                    >
-                        <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
-                        <?= $isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist' ?>
+                    <form method="<?= $isLoggedIn ? 'POST' : 'GET' ?>" action="<?= $isLoggedIn ? '' : 'login.php' ?>" class="flex-fill">
+                        <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
+                        <button
+                            type="submit"
+                            <?= $isLoggedIn ? 'name="toggle_wishlist"' : '' ?>
+                            class="btn btn-outline-dark w-100 <?= $isWishlisted ? 'active' : '' ?>">
+                            <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
+                            <?= $isLoggedIn ? ($isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist') : 'Login to use Wishlist' ?>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <button type="button" class="btn btn-secondary w-100" disabled>
+                        Unavailable
                     </button>
-                </form>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                    <form method="GET" action="edit_product.php" class="flex-fill">
+                        <input type="hidden" name="id" value="<?= (int) $product['id'] ?>">
+                        <button type="submit" class="btn btn-primary w-100">
+                            Edit Product
+                        </button>
+                    </form>
+                    <?php if ($product['deleted'] == 0): ?>
+                        <form method="POST" action="delete_product.php" class="flex-fill" onsubmit="return confirm('Are you sure you want to remove this product?');">
+                            <input type="hidden" name="id" value="<?= (int) $product['id'] ?>">
+                            <button type="submit" class="btn btn-danger w-100">
+                                Remove Product
+                            </button>
+                        </form>
+                    <?php else: ?>
+                        <form method="POST" action="restore_product.php" class="flex-fill">
+                            <input type="hidden" name="id" value="<?= (int) $product['id'] ?>">
+                            <button type="submit" class="btn btn-success w-100">
+                                Restore Product
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                <?php endif; ?>
 
                 <a href="products.php?category=<?= urlencode($product['category']) ?>" class="btn btn-outline-dark mt-3 w-100">
                     ← Back to <?= htmlspecialchars($product['category']) ?>
@@ -328,77 +387,77 @@ function renderStars($rating)
     </div>
 
     <div class="mt-5 pt-4 border-top">
-    <h4 class="mb-4 text-start">Customer Reviews</h4>
-    <div class="mb-3">
-    <?php if ($totalReviews > 0): ?>
-        <div class="average-rating">
-            <?php
-            for ($i = 1; $i <= 5; $i++) {
-                echo $i <= round($avgRating) ? '★' : '☆';
-            }
-            ?>
-            <span class="ms-2 text-muted">
-                <?= $avgRating ?> / 5 (<?= $totalReviews ?> review<?= $totalReviews > 1 ? 's' : '' ?>)
-            </span>
+        <h4 class="mb-4 text-start">Customer Reviews</h4>
+        <div class="mb-3">
+            <?php if ($totalReviews > 0): ?>
+                <div class="average-rating">
+                    <?php
+                    for ($i = 1; $i <= 5; $i++) {
+                        echo $i <= round($avgRating) ? '★' : '☆';
+                    }
+                    ?>
+                    <span class="ms-2 text-muted">
+                        <?= $avgRating ?> / 5 (<?= $totalReviews ?> review<?= $totalReviews > 1 ? 's' : '' ?>)
+                    </span>
+                </div>
+            <?php else: ?>
+                <span class="text-muted">No reviews yet</span>
+            <?php endif; ?>
         </div>
-    <?php else: ?>
-        <span class="text-muted">No reviews yet</span>
-    <?php endif; ?>
-</div>
 
-    <?php if (!empty($productReviews)): ?>
-        <div class="reviews-list">
-            <?php foreach ($productReviews as $review): ?>
-                <div class="review-item">
-                    <div class="review-top">
-                        <div>
-                            <strong><?php echo htmlspecialchars($review['username']); ?></strong>
-                            <div class="review-stars">
-                                <?php echo renderStars($review['rating']); ?>
+        <?php if (!empty($productReviews)): ?>
+            <div class="reviews-list">
+                <?php foreach ($productReviews as $review): ?>
+                    <div class="review-item">
+                        <div class="review-top">
+                            <div>
+                                <strong><?php echo htmlspecialchars($review['username']); ?></strong>
+                                <div class="review-stars">
+                                    <?php echo renderStars($review['rating']); ?>
+                                </div>
                             </div>
+                            <small class="review-date">
+                                <?php echo htmlspecialchars($review['created_at']); ?>
+                            </small>
                         </div>
-                        <small class="review-date">
-                            <?php echo htmlspecialchars($review['created_at']); ?>
-                        </small>
+                        <p class="review-text mb-0">
+                            <?php echo htmlspecialchars($review['review_text']); ?>
+                        </p>
                     </div>
-                    <p class="review-text mb-0">
-                        <?php echo htmlspecialchars($review['review_text']); ?>
-                    </p>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <div class="empty-state">
-            <p>Be the first to review this product.</p>
-        </div>
-    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="empty-state">
+                <p>Be the first to review this product.</p>
+            </div>
+        <?php endif; ?>
 
-    <button class="btn btn-dark mt-3" onclick="toggleReviewForm()">Leave a Review</button>
+        <button class="btn btn-dark mt-3" onclick="toggleReviewForm()">Leave a Review</button>
 
-    <div id="reviewForm" style="display:none;" class="mt-3">
-        <form method="POST">
-            <div class="mb-2">
-                <div class="mb-3">
-                    <label class="form-label">Rating:</label>
-                    <div class="star-rating">
-                    <?php for ($i = 5; $i >= 1; $i--): ?>
-                        <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" required>
-                        <label for="star<?= $i ?>">★</label>
-                        <?php endfor; ?>
+        <div id="reviewForm" style="display:none;" class="mt-3">
+            <form method="POST">
+                <div class="mb-2">
+                    <div class="mb-3">
+                        <label class="form-label">Rating:</label>
+                        <div class="star-rating">
+                            <?php for ($i = 5; $i >= 1; $i--): ?>
+                                <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" required>
+                                <label for="star<?= $i ?>">★</label>
+                            <?php endfor; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mb-2">
-                <textarea name="review_text" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
-            </div>
+                <div class="mb-2">
+                    <textarea name="review_text" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
+                </div>
 
-            <button type="submit" name="submit_review" class="btn btn-success">
-                Submit Review
-            </button>
-        </form>
+                <button type="submit" name="submit_review" class="btn btn-success">
+                    Submit Review
+                </button>
+            </form>
+        </div>
     </div>
-</div>
 
     <?php if (!empty($related)): ?>
         <div class="mt-5 pt-4 border-top">
@@ -412,8 +471,7 @@ function renderStars($rating)
                                     <img
                                         src="<?= htmlspecialchars(normalizeImagePath($r['image'])) ?>"
                                         alt="<?= htmlspecialchars($r['name']) ?>"
-                                        class="card-img-top related-img"
-                                    >
+                                        class="card-img-top related-img">
                                 </div>
                                 <div class="card-body text-start">
                                     <p class="product-brand mb-1"><?= htmlspecialchars($r['brand']) ?></p>
@@ -431,48 +489,49 @@ function renderStars($rating)
 </main>
 
 <script>
-function toggleReviewForm() {
-    const form = document.getElementById("reviewForm");
-    form.style.display = form.style.display === "none" ? "block" : "none";
-}
+    function toggleReviewForm() {
+        const form = document.getElementById("reviewForm");
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
 </script>
 
 <style>
-    .review-stars{
+    .review-stars {
         color: #f5c518;
     }
 
     .star-rating {
-    direction: rtl;
-    display: inline-flex;
-    gap: 5px;
-    font-size: 1.6rem;
-    
-}
+        direction: rtl;
+        display: inline-flex;
+        gap: 5px;
+        font-size: 1.6rem;
 
-.star-rating input {
-    display: none;
-}
+    }
 
-.star-rating label {
-    cursor: pointer;
-    color: #ccc;
-    transition: color 0.2s;
-}
+    .star-rating input {
+        display: none;
+    }
 
-.star-rating input:checked ~ label {
-    color: #f5c518;
-}
+    .star-rating label {
+        cursor: pointer;
+        color: #ccc;
+        transition: color 0.2s;
+    }
 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #f5c518;
-}
-.average-rating {
-    font-size: 1.2rem;
-    color: #f5c518;
-    letter-spacing: 2px;
-}
+    .star-rating input:checked~label {
+        color: #f5c518;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+        color: #f5c518;
+    }
+
+    .average-rating {
+        font-size: 1.2rem;
+        color: #f5c518;
+        letter-spacing: 2px;
+    }
 </style>
 
 

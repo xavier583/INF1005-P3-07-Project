@@ -13,18 +13,18 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = (int)$_POST['id'];
 
-    // Delete from maison_reluxe_products using product_id (correct table + column)
+    // Restore into maison_reluxe_products using product_id (correct table + column)
     $stmt = $conn->prepare(
-        "UPDATE maison_reluxe_products SET deleted = 1 WHERE product_id = ?"
+        "UPDATE maison_reluxe_products SET deleted = 0 WHERE product_id = ?"
     );
     $stmt->bind_param('i', $id);
 
     if ($stmt->execute()) {
     $stmt->close();
-        header('Location: products.php?msg=deleted');
+        header('Location: products.php?msg=restored');
     } else {
     $stmt->close();
-        echo 'Error deleting product: ' . htmlspecialchars($conn->error);
+        echo 'Error restoring product: ' . htmlspecialchars($conn->error);
     }
 
 } else {

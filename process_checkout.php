@@ -217,6 +217,13 @@ try {
         }
 
         $itemStmt->close();
+        
+            if ($member_id > 0) {
+            $stmt = $conn->prepare("DELETE FROM maison_reluxe_cart WHERE member_id=?");
+            $stmt->bind_param("i", $member_id);
+            $stmt->execute();
+            $stmt->close();
+            }
      }
     $conn->commit();
 
@@ -235,7 +242,11 @@ if (empty($errors))
     {
         if (saveOrderToDB()) {
             $_SESSION['cart'] = [];
+
+            // Remove old input data
             unset($_SESSION['old']);
+
+            // Redirect to success page
             header('Location: checkout_success.php');
             exit();
         }

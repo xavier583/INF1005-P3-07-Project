@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
          SET name=?, price=?, image=?, category=?, brand=?, description=?
          WHERE product_id=?"
     );
-    $stmt->bind_param('sdssss i', $name, $price, $image, $category, $brand, $description, $id);
+    $stmt->bind_param('sdssssi', $name, $price, $image, $category, $brand, $description, $id);
 
     if ($stmt->execute()) {
         $message = 'Product updated successfully!';
@@ -113,13 +113,11 @@ if (!$product) {
         </div>
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="4" required>
-                <?= htmlspecialchars($product['description']) ?>
-            </textarea>
+            <textarea name="description" class="form-control" rows="4" required><?= htmlspecialchars($product['description']) ?></textarea>
         </div>
 
         <button type="submit" class="btn btn-warning">Update Product</button>
-        <a href="products.php" class="btn btn-outline-secondary ms-2">Back to Products</a>
+        <a href="product_detail.php?id=<?php echo $product['product_id'];?>" class="btn btn-outline-secondary ms-2">Back to Products</a>
     </form>
 </main>
 

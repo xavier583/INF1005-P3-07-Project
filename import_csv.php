@@ -104,7 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
 
                     $stmt->bind_param(
                         'isdssss',
-                        $productId, $name, $price, $image, $category, $brand, $description
+                        $productId,
+                        $name,
+                        $price,
+                        $image,
+                        $category,
+                        $brand,
+                        $description
                     );
                     $stmt->execute();
 
@@ -127,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
 }
 
 // ── Load current products for preview table ───────────────────────────────────
-$result = $conn->query("SELECT product_id, name, price, category, brand FROM maison_reluxe_products ORDER BY product_id");
+$result = $conn->query("SELECT product_id, name, price, category, brand,deleted FROM maison_reluxe_products ORDER BY product_id");
 $currentProducts = [];
 if ($result) {
     while ($row = $result->fetch_assoc()) {
@@ -167,8 +173,7 @@ if ($result) {
                                 id="csv_file"
                                 name="csv_file"
                                 accept=".csv"
-                                required
-                            >
+                                required>
                             <div class="form-text">
                                 File must be <code>.csv</code> with columns in this exact order:<br>
                                 <code>product_id, name, price, image, category, brand, description</code>
@@ -196,13 +201,48 @@ if ($result) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>product_id</td> <td>Integer</td> <td>40</td>            <td>Must be unique. Existing ID = update; new ID = insert.</td></tr>
-                            <tr><td>name</td>        <td>Text</td>    <td>Rolex Submariner</td> <td>Required</td></tr>
-                            <tr><td>price</td>       <td>Decimal</td> <td>20500.00</td>      <td>Required. No currency symbols.</td></tr>
-                            <tr><td>image</td>       <td>Text</td>    <td>watches/rolex1.jpeg</td> <td>Path relative to <code>images/</code> folder.</td></tr>
-                            <tr><td>category</td>    <td>Text</td>    <td>Watches</td>        <td>Must match existing categories exactly.</td></tr>
-                            <tr><td>brand</td>       <td>Text</td>    <td>Rolex</td>          <td>Required</td></tr>
-                            <tr><td>description</td> <td>Text</td>    <td>"A legendary..."</td> <td>Wrap in quotes if it contains commas.</td></tr>
+                            <tr>
+                                <td>product_id</td>
+                                <td>Integer</td>
+                                <td>40</td>
+                                <td>Must be unique. Existing ID = update; new ID = insert.</td>
+                            </tr>
+                            <tr>
+                                <td>name</td>
+                                <td>Text</td>
+                                <td>Rolex Submariner</td>
+                                <td>Required</td>
+                            </tr>
+                            <tr>
+                                <td>price</td>
+                                <td>Decimal</td>
+                                <td>20500.00</td>
+                                <td>Required. No currency symbols.</td>
+                            </tr>
+                            <tr>
+                                <td>image</td>
+                                <td>Text</td>
+                                <td>watches/rolex1.jpeg</td>
+                                <td>Path relative to <code>images/</code> folder.</td>
+                            </tr>
+                            <tr>
+                                <td>category</td>
+                                <td>Text</td>
+                                <td>Watches</td>
+                                <td>Must match existing categories exactly.</td>
+                            </tr>
+                            <tr>
+                                <td>brand</td>
+                                <td>Text</td>
+                                <td>Rolex</td>
+                                <td>Required</td>
+                            </tr>
+                            <tr>
+                                <td>description</td>
+                                <td>Text</td>
+                                <td>"A legendary..."</td>
+                                <td>Wrap in quotes if it contains commas.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -224,20 +264,28 @@ if ($result) {
                     <th>Price (SGD)</th>
                     <th>Category</th>
                     <th>Brand</th>
+                    <th>Availablity</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($currentProducts)): ?>
-                    <tr><td colspan="5" class="text-center text-muted">No products in database yet.</td></tr>
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No products in database yet.</td>
+                    </tr>
                 <?php else: ?>
                     <?php foreach ($currentProducts as $p): ?>
-                    <tr>
-                        <td><?= (int)$p['product_id'] ?></td>
-                        <td><?= htmlspecialchars($p['name']) ?></td>
-                        <td>$<?= number_format((float)$p['price'], 2) ?></td>
-                        <td><?= htmlspecialchars($p['category']) ?></td>
-                        <td><?= htmlspecialchars($p['brand']) ?></td>
-                    </tr>
+                        <tr>
+                            <td><?= (int)$p['product_id'] ?></td>
+                            <td>
+                                <a href="<?= htmlspecialchars($rootPath) ?>/product_detail.php?id=<?= (int)$p['product_id'] ?>" class="product-link">
+                                    <?= htmlspecialchars($p['name']) ?>
+                                </a>
+                            </td>
+                            <td>$<?= number_format((float)$p['price'], 2) ?></td>
+                            <td><?= htmlspecialchars($p['category']) ?></td>
+                            <td><?= htmlspecialchars($p['brand']) ?></td>
+                            <td><?= ($p['deleted'] == 0) ? 'Available' : 'Unavailable' ?></td>
+                        </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </tbody>
@@ -245,5 +293,13 @@ if ($result) {
     </div>
 
 </main>
-
+<style>
+.product-link {
+    color: inherit;          /* Use text color of surrounding element */
+    text-decoration: none;   /* Remove underline */
+}
+.product-link:hover {
+    text-decoration: underline; /* Optional: underline on hover for usability */
+}
+</style>
 <?php include 'includes/footer.php'; ?>

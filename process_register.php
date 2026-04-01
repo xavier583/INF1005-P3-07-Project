@@ -62,10 +62,8 @@ if (empty($_POST["pwd"])) {
 echo "<div class='response text-center my-5'>";
 
 if ($success) {
-    saveMemberToDB();
-}
+    $user_id = saveMemberToDB();
 
-if ($success) {
     $_SESSION["user_id"] = $user_id;
     $_SESSION["username"] = $username;
     $_SESSION["email"] = $email;
@@ -84,9 +82,9 @@ echo "</div>";
 
 function saveMemberToDB()
 {
-    global $conn, $username, $email, $pwd_hashed,$role, $errorMsg, $success;
+    global $conn, $username, $email, $pwd_hashed, $role, $errorMsg, $success;
 
-    include "php/db_connect.php";
+    require_once "php/db_connect.php";
 
     if (!isset($conn) || $conn->connect_error) {
         $errorMsg = "Database connection failed.";
@@ -124,17 +122,33 @@ function saveMemberToDB()
         return;
     }
 
-    $stmt->bind_param("ssss", $username, $email, $pwd_hashed,$role);
+    $stmt->bind_param("ssss", $username, $email, $pwd_hashed, $role);
 
     if (!$stmt->execute()) {
         $errorMsg = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
         $success = false;
     }
-
+    $stmt->close();
     $user_id = $conn->insert_id;
 
-    $stmt->close();
+    if (!empty($_SESSION['cart'])) {
+        foreach ($_SESSION['cart'] as $product_id => $item) {
+            $quantity = (int)$item['quantity'];
+            if ($quantity > 0) {
+                $stmt = $conn->prepare("
+                INSERT INTO maison_reluxe_cart (member_id, product_id, quantity)
+                VALUES (?, ?, ?)
+                ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)
+            ");
+                $stmt->bind_param("iii", $user_id, $product_id, $quantity);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+    
+    }
     $conn->close();
+    return $user_id;
 }
 ?>
 
