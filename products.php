@@ -17,27 +17,27 @@ else
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
     $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
-    if ($isLoggedIn){
+    if ($isLoggedIn) {
 
-    // Check if already in wishlist
-    $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
-    $stmt->bind_param("ii", $member_id, $pid);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        // REMOVE from wishlist
-        $stmt = $conn->prepare("DELETE FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
+        // Check if already in wishlist
+        $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
         $stmt->bind_param("ii", $member_id, $pid);
         $stmt->execute();
-    } else {
-        // ADD to wishlist
-        $stmt = $conn->prepare("INSERT INTO maison_reluxe_wishlist (member_id, product_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $member_id, $pid);
-        $stmt->execute();
-    }
+        $stmt->store_result();
 
-    $stmt->close();
+        if ($stmt->num_rows > 0) {
+            // REMOVE from wishlist
+            $stmt = $conn->prepare("DELETE FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
+            $stmt->bind_param("ii", $member_id, $pid);
+            $stmt->execute();
+        } else {
+            // ADD to wishlist
+            $stmt = $conn->prepare("INSERT INTO maison_reluxe_wishlist (member_id, product_id) VALUES (?, ?)");
+            $stmt->bind_param("ii", $member_id, $pid);
+            $stmt->execute();
+        }
+
+        $stmt->close();
     }
 
     $redirectTo = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : 'products.php';
@@ -262,13 +262,14 @@ if ($showWishlist && !empty($wishlistIds)) {
                         <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
                         <div class="col">
                             <div class="product-tile position-relative">
-                                <form method="POST" class="wishlist-toggle-form">
-                                    <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
-                                    <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
-                                    <button type="submit" name="toggle_wishlist"
-                                        class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>"
-                                        aria-label="<?= $isWishlisted ? 'Remove from wishlist' : 'Add to wishlist' ?>">
-                                        <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                                <form method="<?= $isLoggedIn ? 'POST' : 'GET' ?>" action="<?= $isLoggedIn ? '' : 'login.php' ?>" class="flex-fill">
+                                    <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
+                                    <button
+                                        type="submit"
+                                        <?= $isLoggedIn ? 'name="toggle_wishlist"' : '' ?>
+                                        class="btn btn-outline-dark w-100 <?= $isWishlisted ? 'active' : '' ?>">
+                                        <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
+                                        <?= $isLoggedIn ? ($isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist') : 'Login to use Wishlist' ?>
                                     </button>
                                 </form>
                                 <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
