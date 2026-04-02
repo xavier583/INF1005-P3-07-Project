@@ -8,6 +8,16 @@ body {
     color: #333;
 }
 
+/* Improve default link contrast against #f4f4f4 background */
+a {
+    color: #0056b3; 
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #003d82;
+}
+
 /* Container for centered content */
 .container {
     width: 80%;
@@ -43,6 +53,7 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: underline;
+    color: #000;
 }
 
 .nav-link.active {

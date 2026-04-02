@@ -14,12 +14,12 @@ include 'includes/header.php';
         <legend class="sr-only">Account Details</legend>
     <div class="form-group">
         <label for="username">Username:</label>
-        <input type="username" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required>
+        <input type="text" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required aria-describedby="username-error">
         <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $username = $_POST["username"];
             if (!preg_match("/^[a-zA-Z0-9_]{4,20}$/", $username)) {
-                echo "<p style='color: red;'>Username must be between 4 and 20 characters and can only contain letters, numbers, and underscores.</p>";
+                echo "<p id='username-error' style='color: red;'>Username must be between 4 and 20 characters and can only contain letters, numbers, and underscores.</p>";
             }
             $username = htmlspecialchars(trim($_POST['username']));
         }

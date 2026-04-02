@@ -12,11 +12,11 @@
         </p>
     </div>
 
-    <section class="footer-links-area">
+    <section class="footer-links-area" aria-label="Footer Links">
         <div class="container">
             <div class="row g-4 text-start">
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h3 class="footer-link-heading">Contact Hub</h3>
+                    <h2 class="footer-link-heading h3">Contact Hub</h2>
                     <ul class="footer-link-list">
                         <li><a href="#">Store locator</a></li>
                         <li><a href="#">Contact &amp; Appointments</a></li>
@@ -24,7 +24,7 @@
                     </ul>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h3 class="footer-link-heading">Customer Care</h3>
+                    <h2 class="footer-link-heading h3">Customer Care</h2>
                     <ul class="footer-link-list">
                         <li><a href="#">Order information</a></li>
                         <li><a href="#">Services</a></li>
@@ -33,7 +33,7 @@
                     </ul>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h3 class="footer-link-heading">About Maison Reluxe</h3>
+                    <h2 class="footer-link-heading h3">About Maison Reluxe</h2>
                     <ul class="footer-link-list">
                         <li><a href="#">Brand protection</a></li>
                         <li><a href="#">Ethics &amp; Compliance</a></li>
@@ -42,7 +42,7 @@
                     </ul>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h3 class="footer-link-heading">Privacy &amp; Legal</h3>
+                    <h2 class="footer-link-heading h3">Privacy &amp; Legal</h2>
                     <ul class="footer-link-list">
                         <li><a href="#" class="js-popup-link" data-popup-id="cookies-settings">Cookies Settings</a></li>
                         <li><a href="#" class="js-popup-link" data-popup-id="privacy-center">Privacy center</a></li>
