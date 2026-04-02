@@ -5,11 +5,13 @@ include 'includes/header.php';
 <?php include 'includes/nav.php'; ?>
 
 <main>
-<form action="process_register.php" method="post" class="form-box">
-    <h1>Member Registration</h1>
+<form action="process_register.php" method="post" class="form-box" aria-label="Member Registration Form">
+    <h1 id="register-heading">Member Registration</h1>
     <p>
         Have an account? <a href="login.php">Sign in</a>
     </p>
+    <fieldset>
+        <legend class="sr-only">Account Details</legend>
     <div class="form-group">
         <label for="username">Username:</label>
         <input type="username" id="username" name="username" placeholder="Enter username" pattern="[A-Za-z0-9_]{4,20}" required>
@@ -42,6 +44,7 @@ include 'includes/header.php';
         <input type="checkbox" name="agree" id="agree" required>
         <label for="agree">Agree to terms and conditions</label>
     </div>
+    </fieldset>
 
     <button type="submit">Register</button>
 
