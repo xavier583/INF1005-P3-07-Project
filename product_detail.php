@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
             INSERT INTO maison_reluxe_reviews (member_id, product_id, rating, review_text, created_at)
             VALUES (?, ?, ?, ?, NOW())
         ");
-        $stmt->bind_param("iiis", $member_id, $id, $rating, $review_text);
+        $stmt->bind_param("iiis", $member_id, $id, $rating, sanitize_input($review_text));
         $stmt->execute();
         $stmt->close();
 

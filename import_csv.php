@@ -284,7 +284,9 @@ if ($result) {
                             <td>$<?= number_format((float)$p['price'], 2) ?></td>
                             <td><?= htmlspecialchars($p['category']) ?></td>
                             <td><?= htmlspecialchars($p['brand']) ?></td>
-                            <td><?= ($p['deleted'] == 0) ? 'Available' : 'Unavailable' ?></td>
+                            <td><span class="availability-badge <?= $p['deleted'] == 0 ? 'available' : 'unavailable' ?>">
+                                <?= $p['deleted'] == 0 ? 'Available' : 'Unavailable' ?>
+                            </span></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -294,12 +296,32 @@ if ($result) {
 
 </main>
 <style>
-.product-link {
-    color: inherit;          /* Use text color of surrounding element */
-    text-decoration: none;   /* Remove underline */
-}
-.product-link:hover {
-    text-decoration: underline; /* Optional: underline on hover for usability */
-}
+    .product-link {
+        color: inherit;
+        /* Use text color of surrounding element */
+        text-decoration: none;
+        /* Remove underline */
+    }
+
+    .product-link:hover {
+        text-decoration: underline;
+        /* Optional: underline on hover for usability */
+    }
+
+    .availability-badge {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 25px;
+        color: white;
+        text-align: center;
+    }
+
+    .availability-badge.available {
+        background-color: green;
+    }
+
+    .availability-badge.unavailable {
+        background-color: red;
+    }
 </style>
 <?php include 'includes/footer.php'; ?>
