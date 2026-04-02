@@ -4,6 +4,7 @@ include 'includes/header.php';
 ?>
 <?php include 'includes/nav.php'; ?>
 
+<main>
 <form action="process_register.php" method="post" class="form-box">
     <h1>Member Registration</h1>
     <p>
@@ -45,5 +46,6 @@ include 'includes/header.php';
     <button type="submit">Register</button>
 
 </form>
+</main>
 
 <?php include 'includes/footer.php'; ?>
