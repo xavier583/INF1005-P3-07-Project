@@ -262,16 +262,21 @@ if ($showWishlist && !empty($wishlistIds)) {
                         <?php $isWishlisted = in_array((int)$product['id'], $wishlistIds, true); ?>
                         <div class="col">
                             <div class="product-tile position-relative">
-                                <form method="<?= $isLoggedIn ? 'POST' : 'GET' ?>" action="<?= $isLoggedIn ? '' : 'login.php' ?>" class="flex-fill">
-                                    <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
-                                    <button
-                                        type="submit"
-                                        <?= $isLoggedIn ? 'name="toggle_wishlist"' : '' ?>
-                                        class="btn btn-outline-dark w-100 <?= $isWishlisted ? 'active' : '' ?>">
-                                        <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?> me-2"></i>
-                                        <?= $isLoggedIn ? ($isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist') : 'Login to use Wishlist' ?>
-                                    </button>
-                                </form>
+                            <form method="<?= $isLoggedIn ? 'POST' : 'GET' ?>"
+                                action="<?= $isLoggedIn ? '' : 'login.php' ?>"
+                                class="wishlist-toggle-form">
+                                <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                                <?php if ($isLoggedIn): ?>
+                                    <input type="hidden" name="redirect_to" value="<?= htmlspecialchars($currentUrl) ?>">
+                                <?php endif; ?>
+                                <button type="submit" <?= $isLoggedIn ? 'name="toggle_wishlist"' : '' ?>
+                                    class="wishlist-btn <?= $isWishlisted ? 'active' : '' ?>"
+                                    aria-label="<?= $isLoggedIn
+                                                    ? ($isWishlisted ? 'Remove from wishlist' : 'Add to wishlist')
+                                                    : 'Login to use wishlist' ?>">
+                                    <i class="bi <?= $isWishlisted ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+                                </button>
+                            </form>
                                 <a href="product_detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
                                     <div class="card h-100 product-card border-0 shadow-sm">
                                         <div class="product-img-wrapper">

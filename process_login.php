@@ -49,7 +49,7 @@ function authenticateUser()
 {
     global $conn, $user_id, $username, $email, $password,$role, $errorMsg, $success;
 
-    include "php/db_connect.php";
+    require_once "php/db_connect.php";
 
     if (!isset($conn) || $conn->connect_error) {
         $errorMsg = "Database connection failed.";

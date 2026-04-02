@@ -432,7 +432,15 @@ function renderStars($rating)
             </div>
         <?php endif; ?>
 
-        <button class="btn btn-dark mt-3" onclick="toggleReviewForm()">Leave a Review</button>
+        <?php if ($isLoggedIn): ?>
+            <button class="btn btn-dark mt-3" onclick="toggleReviewForm()">Leave a Review</button>
+        <?php else: ?>
+            <form method="GET" action="login.php" class="flex-fill">
+                <button type="submit" class="btn btn-dark mt-3 w-100">
+                    Login to leave a Review
+                </button>
+            </form>
+        <?php endif; ?>
 
         <div id="reviewForm" style="display:none;" class="mt-3">
             <form method="POST">
