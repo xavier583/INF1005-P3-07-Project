@@ -2,7 +2,7 @@
 session_start();
 require 'php/db_connect.php';
 
-// Admin guard — only logged-in admins can access this page
+// Only admins can access page
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $brand       = trim($_POST['brand']);
     $description = trim($_POST['description']);
 
-    // Insert into maison_reluxe_products (correct table name)
+    // Add into maison_reluxe_products
     $stmt = $conn->prepare(
         "INSERT INTO maison_reluxe_products (name, price, image, category, brand, description)
          VALUES (?, ?, ?, ?, ?, ?)"

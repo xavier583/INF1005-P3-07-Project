@@ -8,7 +8,6 @@ body {
     color: #333;
 }
 
-/* Improve default link contrast against #f4f4f4 background */
 a {
     color: #0056b3; 
     text-decoration: underline;
@@ -18,7 +17,6 @@ a:hover {
     color: #003d82;
 }
 
-/* Container for centered content */
 .container {
     width: 80%;
     margin: auto;
@@ -105,12 +103,11 @@ main h1, main h2 {
     word-break: break-word !important;
 }
 
-/* Category Buttons Container as Grid */
 .category-buttons {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    gap: 20px;                             /* spacing between buttons */
-    justify-items: center;                  /* center buttons horizontally */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px;                            
+    justify-items: center;                  
     margin-top: 40px;
 }
 
@@ -138,7 +135,6 @@ main h1, main h2 {
     transition: transform 0.3s;
 }
 
-/* Hover effect */
 .category-buttons a:hover {
     transform: scale(1.05);
 }
@@ -180,20 +176,17 @@ main h1, main h2 {
         url("../images/product page/accessories_product_page.jpg");
 }
 
-/* Center the form */
 form {
     width: 350px;
     margin: 0 auto;
 }
 
-/* Each row */
 .form-group {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
 
-/* Labels (fixed width for alignment) */
 .form-group label {
     width: 120px;
     font-weight: bold;
@@ -208,16 +201,14 @@ form {
     border-radius: 5px;
 }
 
-/* Checkbox row fix */
 .form-group.checkbox {
     display: flex;
     justify-content: center;
     align-items: right;
     gap: 8px;    
-    width: 100%;          /* small space between checkbox and text */
+    width: 100%;          
 }
 
-/* Remove fixed width from checkbox label */
 .form-group.checkbox label {
     width: auto;
     margin: 0;
@@ -225,12 +216,10 @@ form {
 
 }
 
-/* Optional: make checkbox slightly bigger */
 .form-group.checkbox input {
     width: auto;
 }
 
-/* Center the button */
 form button {
     display: block;
     margin: 20px auto;
@@ -260,7 +249,7 @@ form button {
 }
 
 .card-body h5 {
-    min-height: 50px;   /* ensures all product names take same space */
+    min-height: 50px;   
 }
 
 .card-body .btn {
@@ -368,7 +357,7 @@ input, select {
     margin: 0;
     padding-left: 20px;
 }
-/* SUCCESS PAYYMENT PAGE */
+/* SUCCESS PAYMENT PAGE */
 .success-container {
     max-width: 600px;
     margin: 80px auto;
@@ -396,7 +385,7 @@ input, select {
     background: black;
 }
 
-/* INDEX (HOME) PAGE */
+/* HOME PAGE */
 .hero {
     position: relative;
     height: 100vh;
@@ -414,7 +403,6 @@ input, select {
     z-index: 1;
 }
 
-/* Dark overlay for better text visibility */
 .hero::after {
     content: "";
     position: absolute;

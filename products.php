@@ -1,8 +1,4 @@
 <?php
-/*
- * products.php  – reads product data from MySQL (maison_reluxe_products).
- * Wishlist still stored in session as before.
- */
 
 session_start();
 require_once 'php/db_connect.php';
@@ -19,19 +15,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
     $pid = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
     if ($isLoggedIn) {
 
-        // Check if already in wishlist
+        // Check if item is in wishlist
         $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
         $stmt->bind_param("ii", $member_id, $pid);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            // REMOVE from wishlist
             $stmt = $conn->prepare("DELETE FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
             $stmt->bind_param("ii", $member_id, $pid);
             $stmt->execute();
         } else {
-            // ADD to wishlist
             $stmt = $conn->prepare("INSERT INTO maison_reluxe_wishlist (member_id, product_id) VALUES (?, ?)");
             $stmt->bind_param("ii", $member_id, $pid);
             $stmt->execute();
@@ -48,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
     exit;
 }
 
-// ── Category banner images (unchanged) ───────────────────────────────────────
+// ── Category banner images
 $categories = [
     'Watches'     => 'product page/watch_product_page.jpg',
     'Jewellery'   => 'product page/jewellery_product_page.jpg',
@@ -58,7 +52,7 @@ $categories = [
     'Accessories' => 'product page/accessories_product_page.jpg',
 ];
 
-// ── Read request params ───────────────────────────────────────────────────────
+
 $activeCategory = isset($_GET['category']) ? trim($_GET['category']) : null;
 $showGrid       = $activeCategory && array_key_exists($activeCategory, $categories);
 $searchQuery    = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -78,13 +72,8 @@ while ($row = $result->fetch_assoc()) {
 
 $stmt->close();
 
-// ── Fetch products from database ──────────────────────────────────────────────
+// Fetch products from database 
 
-/**
- * Build a safe query and return an array of product rows.
- * $category : string|null  – filter by category, or null for all
- * $search   : string       – search term, or '' for no filter
- */
 function fetchProducts(mysqli $conn, ?string $category, string $search): array
 {
     $where  = [];
@@ -210,9 +199,7 @@ if ($showWishlist && !empty($wishlistIds)) {
         <?php endif; ?>
 
     <?php elseif (!$showGrid): ?>
-        <!-- ═══════════════════════════════════════════════════════════
-     VIEW 1: Category Landing (image cards)
-══════════════════════════════════════════════════════════════ -->
+        <!-- VIEW 1: Category Landing (image cards) -->
         <div class="text-center mb-5">
             <h1 class="products-title">Our Products</h1>
             <p class="text-muted" style="font-size:1.1em;">Browse our collection of luxury secondhand goods.</p>
@@ -299,9 +286,7 @@ if ($showWishlist && !empty($wishlistIds)) {
         <?php endif; ?>
 
     <?php else: ?>
-        <!-- ═══════════════════════════════════════════════════════════
-     VIEW 2: Product Grid for selected category
-══════════════════════════════════════════════════════════════ -->
+     <!-- VIEW 2: Product Grid for selected category -->
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="products.php" class="text-dark">All Categories</a></li>

@@ -2,7 +2,7 @@
 session_start();
 require 'php/db_connect.php';
 
-// Admin guard — only logged-in admins can access this page
+// Only admin can access
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
@@ -12,7 +12,7 @@ $message = '';
 $msgType = '';
 $product = null;
 
-// Fetch product by product_id (correct column name)
+// Fetch product by product_id
 if (isset($_GET['id'])) {
     $id   = (int)$_GET['id'];
     $stmt = $conn->prepare(
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $brand       = trim($_POST['brand']);
     $description = trim($_POST['description']);
 
-    // Update maison_reluxe_products using product_id (correct column name)
+    // Update maison_reluxe_products using product_id
     $stmt = $conn->prepare(
         "UPDATE maison_reluxe_products
          SET name=?, price=?, image=?, category=?, brand=?, description=?
@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     if ($stmt->execute()) {
         $message = 'Product updated successfully!';
         $msgType = 'success';
-        // Refresh product data shown in the form
         $product['name']        = $name;
         $product['price']       = $price;
         $product['image']       = $image;

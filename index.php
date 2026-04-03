@@ -6,7 +6,7 @@ include 'includes/header.php';
 
 <main id="main-content">
 
-<!-- Hero Video -->
+<!-- Video -->
 <section class = "hero">
     <video autoplay muted loop id="hero-video">
         <source src="images/Maison Reluxe Homepage.mp4" type="video/mp4">

@@ -1,9 +1,4 @@
 <?php
-/*
- * product_detail.php – reads product from MySQL (maison_reluxe_products).
- * Cart and wishlist logic unchanged.
- */
-
 session_start();
  error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -58,19 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_wishlist'])) {
     $pid = isset($_POST['product_id']) ? (int) $_POST['product_id'] : 0;
     $member_id = $_SESSION['user_id'] ?? null;
 
-    // Check if already in wishlist
+    // Check if item is in wishlist
     $stmt = $conn->prepare("SELECT wishlist_id FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
     $stmt->bind_param("ii", $member_id, $pid);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // REMOVE
         $stmt = $conn->prepare("DELETE FROM maison_reluxe_wishlist WHERE member_id = ? AND product_id = ?");
         $stmt->bind_param("ii", $member_id, $pid);
         $stmt->execute();
     } else {
-        // ADD
         $stmt = $conn->prepare("INSERT INTO maison_reluxe_wishlist (member_id, product_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $member_id, $pid);
         $stmt->execute();
@@ -509,9 +502,9 @@ function renderStars($rating)
 
 <style>
     .detail-info {
-    padding: 15px;  /* Adjust the padding to make sure it fits */
-    margin: 0;  /* Set margin to 0 to avoid unnecessary space */
-    box-sizing: border-box;  /* Ensures padding is included in the element's width */
+    padding: 15px;  
+    margin: 0;  
+    box-sizing: border-box;  
 }
     .review-stars {
         color: #f5c518;

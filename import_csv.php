@@ -1,27 +1,8 @@
 <?php
-/*
- * import_csv.php
- * Admin page: upload a CSV file to bulk-add or update products in MySQL.
- * Place this file in your project root (same level as products.php).
- *
- * HOW IT WORKS:
- *   1. Admin uploads a CSV file via this page.
- *   2. PHP reads each row and runs INSERT ... ON DUPLICATE KEY UPDATE.
- *      - If product_id already exists  → update name, price, image, category, brand, description.
- *      - If product_id is new          → insert as a new product.
- *   3. A summary shows how many rows were inserted vs updated.
- *
- * CSV FORMAT (first row must be the header):
- *   product_id, name, price, image, category, brand, description
- *
- * SECURITY: Only logged-in admins should be able to access this page.
- */
-
 session_start();
 require_once 'php/db_connect.php';
 
-// ── Admin guard ───────────────────────────────────────────────────────────────
-// Adjust this check to match how your project identifies admins.
+// Only admin can access
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
@@ -31,7 +12,7 @@ $message    = '';
 $msgType    = '';   // 'success' or 'danger'
 $previewRows = [];  // rows parsed from CSV for preview
 
-// ── Handle form submission ────────────────────────────────────────────────────
+// ── Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
 
     $file = $_FILES['csv_file'];
@@ -56,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
             $skipped  = 0;
             $rowNum   = 0;
 
-            // Prepare the upsert statement
+            // Prepare the insert statement
             $sql = "INSERT INTO maison_reluxe_products
                         (product_id, name, price, image, category, brand, description)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -77,12 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                 while (($row = fgetcsv($handle, 0, ',')) !== false) {
                     $rowNum++;
 
-                    // Skip the header row
                     if ($rowNum === 1) {
                         continue;
                     }
 
-                    // Expect exactly 7 columns
                     if (count($row) < 7) {
                         $skipped++;
                         continue;
@@ -96,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                     $brand       = trim($row[5]);
                     $description = trim($row[6]);
 
-                    // Skip rows with missing required fields
                     if ($productId <= 0 || $name === '' || $price <= 0) {
                         $skipped++;
                         continue;
@@ -114,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
                     );
                     $stmt->execute();
 
-                    // affected_rows: 1 = insert, 2 = update, 0 = no change
                     if ($stmt->affected_rows === 1) {
                         $inserted++;
                     } elseif ($stmt->affected_rows === 2) {
@@ -132,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
     }
 }
 
-// ── Load current products for preview table ───────────────────────────────────
+// ── Load current products for preview table 
 $result = $conn->query("SELECT product_id, name, price, category, brand,deleted FROM maison_reluxe_products ORDER BY product_id");
 $currentProducts = [];
 if ($result) {
@@ -298,14 +275,11 @@ if ($result) {
 <style>
     .product-link {
         color: inherit;
-        /* Use text color of surrounding element */
         text-decoration: none;
-        /* Remove underline */
     }
 
     .product-link:hover {
         text-decoration: underline;
-        /* Optional: underline on hover for usability */
     }
 
     .availability-badge {

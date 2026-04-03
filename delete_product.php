@@ -4,7 +4,8 @@ require 'php/db_connect.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-// Admin guard — only logged-in admins can access this page
+
+// Only admin can access
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
@@ -13,7 +14,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = (int)$_POST['id'];
 
-    // Delete from maison_reluxe_products using product_id (correct table + column)
+    // Delete from maison_reluxe_products
     $stmt = $conn->prepare(
         "UPDATE maison_reluxe_products SET deleted = 1 WHERE product_id = ?"
     );

@@ -1,8 +1,3 @@
--- ============================================================
--- Maison Reluxe – Products Table
--- Run this entire file in MySQL Workbench (Query tab)
--- ============================================================
-
 USE maison_reluxe;
 
 CREATE TABLE IF NOT EXISTS maison_reluxe_products (
@@ -16,10 +11,6 @@ CREATE TABLE IF NOT EXISTS maison_reluxe_products (
     created_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ============================================================
--- Seed all existing products
--- ============================================================
 
 INSERT INTO maison_reluxe_products (product_id, name, price, image, category, brand, description) VALUES
 (1,  'Rolex Submariner Ceramic Bezel',         20500.00, 'watches/rolex 1.jpeg',      'Watches',     'Rolex',         'A legendary diver\'s watch with a unidirectional rotatable bezel and Cerachrom ceramic insert. Water-resistant to 300 metres, powered by the calibre 3235 movement. A timeless icon of precision and luxury.'),
