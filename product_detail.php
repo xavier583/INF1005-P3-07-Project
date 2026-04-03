@@ -5,7 +5,10 @@
  */
 
 session_start();
+ error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once 'php/db_connect.php';
+require_once __DIR__ . '/php/functions.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
@@ -40,7 +43,7 @@ $result = $stmt->get_result();
 $data = $result->fetch_assoc();
 
 if ($data) {
-    $avgRating = round($data['avg_rating'], 1);
+    $avgRating = round($data['avg_rating'] ?? 0, 1);
     $totalReviews = (int)$data['total_reviews'];
 }
 
@@ -226,14 +229,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
 
     $member_id = (int) $_SESSION['user_id'];
     $rating = (int) $_POST['rating'];
-    $review_text = trim($_POST['review_text']);
+    $review_text = sanitize_input($_POST['review_text']);
+    $review_text = trim($review_text);
 
     if ($rating >= 1 && $rating <= 5) {
         $stmt = $conn->prepare("
             INSERT INTO maison_reluxe_reviews (member_id, product_id, rating, review_text, created_at)
             VALUES (?, ?, ?, ?, NOW())
         ");
-        $stmt->bind_param("iiis", $member_id, $id, $rating, sanitize_input($review_text));
+        $stmt->bind_param("iiis", $member_id, $id, $rating, $review_text);
         $stmt->execute();
         $stmt->close();
 
@@ -504,6 +508,11 @@ function renderStars($rating)
 </script>
 
 <style>
+    .detail-info {
+    padding: 15px;  /* Adjust the padding to make sure it fits */
+    margin: 0;  /* Set margin to 0 to avoid unnecessary space */
+    box-sizing: border-box;  /* Ensures padding is included in the element's width */
+}
     .review-stars {
         color: #f5c518;
     }
@@ -540,6 +549,7 @@ function renderStars($rating)
         color: #f5c518;
         letter-spacing: 2px;
     }
+
 </style>
 
 

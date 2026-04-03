@@ -82,8 +82,27 @@ main h1, main h2 {
     text-decoration: none;
     border: 1px solid #333;
     cursor: pointer;
-    margin: 5px;
+    margin: 5px 0;
     border-radius: 5px;
+    box-sizing: border-box; 
+}
+
+.btn.w-100 {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+    min-width: 0;
+}
+
+.detail-info .btn {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
 }
 
 /* Category Buttons Container as Grid */
